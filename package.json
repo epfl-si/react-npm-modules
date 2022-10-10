@@ -1,0 +1,25 @@
+{
+  "name": "@epfl-si/react-appauth",
+  "version": "0.1.0",
+  "description": "React bindings for @openid/appauth",
+  "main": "OpenIDConnect.tsx",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/epfl-si/react-appauth.git"
+  },
+  "keywords": [
+    "OpenID-Connect",
+    "OAuth2",
+    "React",
+    "@openid/appauth"
+  ],
+  "author": "EPFL ISAS-FSD <isas-fsd@groupes.epfl.ch>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/epfl-si/react-appauth/issues"
+  },
+  "homepage": "https://github.com/epfl-si/react-appauth#readme"
+}
