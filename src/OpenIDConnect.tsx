@@ -68,7 +68,7 @@ const context = createContext<State>({
   logout: () => {}
 });
 
-export const Context : FC<ContextProps> =
+export const OIDCContext : FC<ContextProps> =
   ({ debug, authServer, client, storage,
      minValiditySeconds, onNewToken, onLogout, children }) => {
   if (! minValiditySeconds) minValiditySeconds = 5;
