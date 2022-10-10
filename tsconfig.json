@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx"
+  }
+}
