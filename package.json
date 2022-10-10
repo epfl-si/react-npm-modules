@@ -21,5 +21,16 @@
   "bugs": {
     "url": "https://github.com/epfl-si/react-appauth/issues"
   },
-  "homepage": "https://github.com/epfl-si/react-appauth#readme"
+  "homepage": "https://github.com/epfl-si/react-appauth#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.19.3",
+    "@babel/core": "^7.19.3",
+    "@babel/preset-env": "^7.19.4",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/preset-typescript": "^7.18.6",
+    "typescript": "^4.8.4"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.12.1"
+  }
 }
