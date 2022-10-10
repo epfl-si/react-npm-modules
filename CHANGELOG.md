@@ -1,6 +1,9 @@
-## Version 0.1.4 - 2022-10-10
+## Version 0.1.5 - 2022-10-10
 
 - Earn the TypeScript sticker
+
+## Version 0.1.4 - 2022-10-10
+
 - Add README.md
 
 ## Version 0.1.3 - 2022-10-10
