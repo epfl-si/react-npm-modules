@@ -40,6 +40,21 @@ export interface ClientConfig {
    */
   scope?: string;
   /**
+   * A place to store the OAuth2 `state=` and PKCE `code_verifier`
+   * inbetween redirects.
+   *
+   * passing either `new LocalStorageBackend()` or `new
+   * LocalStorageBackend(window.sessionStorage)` (where
+   * `LocalStorageBackend` is re-rexported from `@openid/appauth`),
+   * will result in the browser performing a fully-compliant OAuth2
+   * authorization code flow with working `state=` and PKCE checks.
+   * This in turn requires to use browser storage, which will be of
+   * the `window.localStorage` or `window.sessionStorage` variety,
+   * respectively. By default, no browser storage is used, and
+   * (therefore) `state=` checks and PKCE are both disabled.
+   */
+  storage?: StorageBackend;
+  /**
    * Any nonstandard configuration parameter to tweak the
    * authentication server's behavior. Depending on the server's
    * implementation details, suitable keys could include e.g.
@@ -247,6 +262,8 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
     }
   }
 
+  // Only used if we have persistent storage:
+  private pkceCodeVerifier ?: string;
   /**
    * Consume the OAuth2 code if one is present in the browser URL.
    *
@@ -258,6 +275,13 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
    *
    * In both cases, remove all four `code=`, `state=`, `error=` and `session_state=`
    * parts from the browser's URL bar.
+   *
+   * If the `state=` portion matched a request we kept a copy of in
+   * the storage (by way of `@openid/appauth` putting it there); and
+   * that request contained a PKCE `code_verifier` (because we told
+   * `@openid/appauth` to do so in the `redirectForLogin` method, two
+   * redirects ago); then make note of the PKCE `code_verifier` in
+   * `this.pkceCodeVerifier` for the `obtainTokens` method to find.
    *
    * @returns The OAuth2 code (which is not a “token” because it is
    * use-once, for-our-eyes-only), or undefined if there isn't one.
@@ -272,7 +296,10 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
         error: AuthorizationError|undefined;
 
 
-    notifier.setAuthorizationListener((_request, response, error_string) => {
+    notifier.setAuthorizationListener((request, response, error_string) => {
+      if (request?.internal?.code_verifier) {
+        this.pkceCodeVerifier = request.internal.code_verifier;
+      }
       if (response) {
         code = response.code;
       } else {
@@ -294,12 +321,31 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
   private refreshToken : string;
   private accessTokenExpiresEpoch : number;
   /**
-   * Obtain OAuth2 tokens.
+   * Perform an OAuth2 Access Token or Refresh Token request.
    *
-   * If an access token is obtained, parse its JWT state (without
-   * checking the signature) and update `this.tokenExpiresEpoch`
-   * before completing the promise. If a refresh token is obtained,
-   * update `this.refreshToken` before completing the promise.
+   * Depending on whether the `initialOauth2code` method parameter is
+   * set or not, the query sent to the authentication server will be
+   * the access token request of an OAuth2 Authorization Code Grant
+   * (RFC6749, section 4.1.3) or a refresh request of same (ibid,
+   * section 6):
+   *
+   * - If `initialOauth2code` is set, use it as the credential to
+   *   perform a `grant_type=authorization_code` request against the
+   *   authentication server's `token_endpoint`, sending along
+   *   `this.pkceCodeVerifier` (if any) as the PKCE `code_verifier`
+   *   field (RFC7636, section 4.5) - See
+   *   `consumeOAuth2CodeFromBrowserLocation` for details on how
+   *   `this.pkceCodeVerifier` gets retrieved from persistent storage;
+   *
+   * - If the `initialOauth2code` is missing, perform a
+   *   `grant_type=refresh_token` request using `this.refreshToken` as
+   *   the credential.
+   *
+   * Either way, if an access token is obtained, parse its JWT state
+   * (without checking the signature) and update
+   * `this.tokenExpiresEpoch` before completing the promise; and if a
+   * refresh token is obtained, update `this.refreshToken` before
+   * completing the promise.
    *
    * @param initialOauth2code The OAuth2 code that was on the
    *                          browser's URL after getting redirected
@@ -319,7 +365,7 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
         grant_type,
         ...(initialOauth2code ? { code: initialOauth2code } : {}),
         refresh_token: this.refreshToken,
-        extras: await this.getPKCEExtras(),
+        extras: initialOauth2code ? { code_verifier: this.pkceCodeVerifier } : {}
       });
 
     const tokens = await tokenHandler.performTokenRequest(config, request);
@@ -376,12 +422,10 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
       extras: this.client.extras
     }, /* crypto = */ undefined, /* usePkce = */ usePkce);
 
-    if (usePkce) {
-      await request.setupCodeVerifier();
-      this.savePKCECodeVerifier(request.internal.code_verifier);
-    }
-
     const authorizationHandler = new RedirectRequestHandler(this.storage);
+    if (this.debug) {
+      console.log(`@epfl-si/react-appauth: redirecting to ${this.client.redirectUri} ${usePkce ? "with" : "without"} PKCE`);
+    }
     authorizationHandler.performAuthorizationRequest(config, request);
   }
 
@@ -400,15 +444,6 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
     }
   }
 
-  private async getPKCEExtras () : Promise<{ code_verifier?: string }> {
-    const retval = {};
-    if (! this.fakeStore) {
-        retval["code_verifier"] = await this.loadPKCECodeVerifier();
-    }
-
-    return retval;
-  }
-
   private async revokeTokens () : Promise<boolean> {
     const config = await this.whenConfigured;
 
@@ -423,16 +458,6 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
       });
 
     return tokenHandler.performRevokeTokenRequest(config, request);
-  }
-
-  private async loadPKCECodeVerifier () : Promise<string> {
-    // See rant above in constructor, and complete it thusly:
-    // ...aaaaaand they don't even manage the PKCE stuff in the store.
-    throw new Error("UNIMPLEMENTED: loadPKCECodeVerifier");
-  }
-
-  private async savePKCECodeVerifier (_code_verifier : string) : Promise<void> {
-    throw new Error("UNIMPLEMENTED: savePKCECodeVerifier");
   }
 
   /**

@@ -12,10 +12,10 @@ An unopinionated React binding for [@openid/appauth](https://www.npmjs.com/packa
 - Brings out the best in `@openid/appauth`'s underlying feature set
   - Uses the modern and secure [OAuth2 authorization code flow](https://darutk.medium.com/diagrams-of-all-the-openid-connect-flows-6968e3990660)
   - (Untested) Supports `extra` redirect parameters, to activate features such as user consent in authentication servers that support them
-  - (Untested, currently stubbed-out) PKCE support
+  - PKCE support
 - **Supports cookie-less, local-storage-less operation**
   - This is in fact the default mode (unlike in `@openid/appauth`)
-  - Obviously, this has a cost with respect to security: no `state=` validation, no PKCE
+  - Obviously, this has a cost with respect to security: no `state=` validation, PKCE is disabled
 - Straightforward, unopinionated React bindings
   - `<OIDCContext>` to pass in configuration and consume “back-office” events (i.e. access tokens)
   - `useOpenIDConnectContext` React hook to consume “front-office” events (for the appearance of widgets such as the login button)
