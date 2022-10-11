@@ -6,7 +6,7 @@ import { AuthorizationNotifier, RedirectRequestHandler,
          BaseTokenRequestHandler, TokenRequest,
          FetchRequestor,
          GRANT_TYPE_AUTHORIZATION_CODE, GRANT_TYPE_REFRESH_TOKEN,
-         AuthorizationServiceConfiguration, TokenResponse,
+         AuthorizationServiceConfiguration,
          RevokeTokenRequest,
          LocalStorageBackend, StorageBackend, UnderlyingStorage,
          BasicQueryStringUtils, LocationLike } from "@openid/appauth";
@@ -62,6 +62,8 @@ export interface ClientConfig {
    */
   extras?: { [k : string] : any };
 }
+
+type StringMap = { [key : string] : string };
 
 export enum StateEnum {
   LoggedOut = 0,
@@ -259,12 +261,7 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
       const code = await this.consumeOAuth2CodeFromBrowserLocation();
       if (! code) return false;
 
-      const { accessToken, refreshToken } = await this.obtainTokens(code);
-      this.callbacks.accessToken(accessToken);
-
-      if (refreshToken) {
-        this.scheduleRenewal();
-      }
+      await this.obtainAndDispatchTokens(code);
 
       return true;
     } catch(e) {
@@ -291,7 +288,8 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
    * that request contained a PKCE `code_verifier` (because we told
    * `@openid/appauth` to do so in the `redirectForLogin` method, two
    * redirects ago); then make note of the PKCE `code_verifier` in
-   * `this.pkceCodeVerifier` for the `obtainTokens` method to find.
+   * `this.pkceCodeVerifier` for the `obtainAndDispatchTokens` method
+   * to find.
    *
    * @returns The OAuth2 code (which is not a “token” because it is
    * use-once, for-our-eyes-only), or undefined if there isn't one.
@@ -352,11 +350,15 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
    *   `grant_type=refresh_token` request using `this.refreshToken` as
    *   the credential.
    *
-   * Either way, if an access token is obtained, parse its JWT state
-   * (without checking the signature) and update
-   * `this.tokenExpiresEpoch` before completing the promise; and if a
-   * refresh token is obtained, update `this.refreshToken` before
-   * completing the promise.
+   * In either case, if the request is successful, the “dispatch“
+   * phase happens immediately afterwards; all the steps described below
+   * happen before the `obtainAndDispatchTokens` promise completes:
+   *
+   * - If an access token was obtained, parse its JWT state (without
+   *   checking the signature) and update `this.tokenExpiresEpoch`;
+   *   and call `this.callbacks.accessToken(tok)` with it
+   *
+   * - If a refresh token is obtained, update `this.refreshToken`
    *
    * @param initialOauth2code The OAuth2 code that was on the
    *                          browser's URL after getting redirected
@@ -365,7 +367,7 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
    *                          refresh using `this.refreshToken`
    *                          instead.
    */
-  private async obtainTokens (initialOauth2code?: string) : Promise<TokenResponse> {
+  private async obtainAndDispatchTokens (initialOauth2code?: string) : Promise<void> {
     const config = await this.whenConfigured;
 
     const tokenHandler = new BaseTokenRequestHandler(new FetchRequestor());
@@ -395,7 +397,13 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
       this.refreshToken = tokens.refreshToken;
     }
 
-    return tokens;
+    const { accessToken, refreshToken } = tokens;
+
+    this.callbacks.accessToken(accessToken);
+
+    if (refreshToken) {
+      this.scheduleRenewal();
+    }
   }
 
   private getClientIdentity(client : ClientConfig) {
@@ -493,8 +501,7 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
     this.stop();
     this.timeout = this.timeouts.setTimeout(async () => {
       try {
-        const { accessToken } = await this.obtainTokens();
-        this.callbacks.accessToken(accessToken);
+        await this.obtainAndDispatchTokens();
         this.scheduleRenewal();
       } catch (error) {
         this.callbacks.error(error);
@@ -598,7 +605,7 @@ class SmarterQueryStringUtils extends BasicQueryStringUtils {
   }
 }
 
-function decodeJWT(jwt : string) : { [key : string] : string } {
+function decodeJWT(jwt : string) : StringMap {
   // Credits to https://stackoverflow.com/a/38552302
   const base64 = jwt.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
   const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
