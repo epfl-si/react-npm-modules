@@ -121,7 +121,7 @@ export const OIDCContext : FC<ContextProps> =
       setLastError(`${error}`);
     }
 
-    await oidc.run({auth: onChangeToken, error: onError});
+    await oidc.run({accessToken: onChangeToken, error: onError});
     setInProgress(false);
   }, [client, authServer, minValiditySeconds]);
 
@@ -150,13 +150,13 @@ export function useOpenIDConnectContext () {
 interface Callbacks {
   /**
    * The callback that informs the caller when a new OAuth2
-   * authentication token becomes available. You might want to set
+   * access token becomes available. You might want to set
    * `Authentication: Bearer ${token}` in your future API calls.
    *
-   *  `token` being `undefined` means that a previous call to the
-   *  `logout` method just succeeded.
+   * `token` being `undefined` means that a previous call to the
+   * `logout` method just succeeded.
    */
-  auth: (token: string|undefined) => void;
+  accessToken: (token: string|undefined) => void;
   error: (error: Error|string) => void;
 }
 
@@ -250,7 +250,7 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
       if (! code) return false;
 
       const { accessToken, refreshToken } = await this.obtainTokens(code);
-      this.callbacks.auth(accessToken);
+      this.callbacks.accessToken(accessToken);
 
       if (refreshToken) {
         this.scheduleRenewal();
@@ -441,7 +441,7 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
     } finally {
       this.refreshToken = undefined;
       this.accessTokenExpiresEpoch = undefined;
-      this.callbacks.auth(undefined);
+      this.callbacks.accessToken(undefined);
     }
   }
 
@@ -484,7 +484,7 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
     this.timeout = this.timeouts.setTimeout(async () => {
       try {
         const { accessToken } = await this.obtainTokens();
-        this.callbacks.auth(accessToken);
+        this.callbacks.accessToken(accessToken);
         this.scheduleRenewal();
       } catch (error) {
         this.callbacks.error(error);
