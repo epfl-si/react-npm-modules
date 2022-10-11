@@ -1,7 +1,6 @@
 /**
  * OpenID-Connect state machine as a React context
  */
-import "core-js/stable";
 import { AuthorizationNotifier, RedirectRequestHandler,
          AuthorizationRequest, AuthorizationError,
          BaseTokenRequestHandler, TokenRequest,
