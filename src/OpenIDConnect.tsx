@@ -121,7 +121,11 @@ export const OIDCContext : FC<ContextProps> =
       setLastError(`${error}`);
     }
 
-    await oidc.run({accessToken: onChangeToken, error: onError});
+    await oidc.run({
+      accessToken: onChangeToken,
+      logout: () => onChangeToken(undefined),
+      error: onError
+    });
     setInProgress(false);
   }, [client, authServer, minValiditySeconds]);
 
@@ -152,11 +156,13 @@ interface Callbacks {
    * The callback that informs the caller when a new OAuth2
    * access token becomes available. You might want to set
    * `Authentication: Bearer ${token}` in your future API calls.
-   *
-   * `token` being `undefined` means that a previous call to the
-   * `logout` method just succeeded.
    */
   accessToken: (token: string|undefined) => void;
+  /**
+   * The callback that informs the caller that a call to the `logout`
+   * method just completed.
+   */
+  logout: () => void;
   error: (error: Error|string) => void;
 }
 
@@ -441,7 +447,7 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
     } finally {
       this.refreshToken = undefined;
       this.accessTokenExpiresEpoch = undefined;
-      this.callbacks.accessToken(undefined);
+      this.callbacks.logout();
     }
   }
 
