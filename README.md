@@ -82,7 +82,7 @@ export function LoginButton () {
 
 If you would like a “hello, user” widget, you could implement one like this:
 
-```
+```jsx
 
 function HelloUser () {
   const oidc = useOpenIDConnectContext();
