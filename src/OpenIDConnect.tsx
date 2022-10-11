@@ -308,7 +308,8 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
     });
 
     await authorizationHandler.completeAuthorizationRequestIfPossible();
-    window.history.replaceState(window.history.state, null, parser.getRemainder(window.location));
+    window.history.replaceState(window.history.state, null,
+                                parser.getURLRemainder(window.location));
     if (code) {
       return code;
     } else if (error) {
@@ -568,7 +569,7 @@ class SmarterQueryStringUtils extends BasicQueryStringUtils {
    * @returns the URL in `input` after removing the `code=`, `state=`,
    * `error=` and `session_state=` parts
    */
-  getRemainder(input : LocationLike) : string {
+  getURLRemainder(input : LocationLike) : string {
     const params = this.parseQueryString(this.useHash ? input.hash : input.search);
     delete params["error"];
     delete params["state"];
