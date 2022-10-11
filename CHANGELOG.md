@@ -1,3 +1,7 @@
+## Version 0.2.1 - 2022-10-11
+
+- Fix: support multiple children to the `<OIDCContext>` React element
+
 ## Version 0.2.0 - 2022-10-11
 
 - PKCE support
