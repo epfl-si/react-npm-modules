@@ -60,7 +60,7 @@ export interface ClientConfig {
    * implementation details, suitable keys could include e.g.
    * `consent` or `access_type`.
    */
-  extras?: { [k : string] : any };
+  extras?: StringMap;
 }
 
 type StringMap = { [key : string] : string };
