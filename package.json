@@ -2,7 +2,7 @@
   "name": "@epfl-si/react-appauth",
   "version": "0.1.5",
   "description": "React bindings for @openid/appauth",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "set -e -x; rm -rf dist ; NODE_ENV=production babel src/* --out-dir dist --extensions '.ts,.tsx' --source-maps; NODE_ENV=production tsc --project tsconfig.json",
@@ -10,7 +10,6 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "files": [
-    "src/**",
     "dist/**"
   ],
   "repository": {
