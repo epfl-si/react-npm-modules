@@ -1,3 +1,8 @@
+## Version 0.2.0 - 2022-10-11
+
+- PKCE support
+- Ability to consume the (parsed) ID token in the React UI (e.g. for the “hello, ${user}!” widget)
+
 ## Version 0.1.6 - 2022-10-11
 
 - Make this package useable from non-TypeScript projects
