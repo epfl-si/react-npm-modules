@@ -163,6 +163,10 @@ interface Callbacks {
    * method just completed.
    */
   logout: () => void;
+  /**
+   * The callback that informs the caller that the `OpenIDConnect`
+   * object encountered an error.
+   */
   error: (error: Error|string) => void;
 }
 
