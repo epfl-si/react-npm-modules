@@ -231,7 +231,7 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
         this.callbacks.error(error);
       });
 
-      const code = await this.consumeOAuth22CodeFromBrowserLocation();
+      const code = await this.consumeOAuth2CodeFromBrowserLocation();
       if (! code) return false;
 
       const { accessToken, refreshToken } = await this.obtainTokens(code);
@@ -262,7 +262,7 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
    * @returns The OAuth2 code (which is not a “token” because it is
    * use-once, for-our-eyes-only), or undefined if there isn't one.
    */
-  private async consumeOAuth22CodeFromBrowserLocation () : Promise<string | undefined> {
+  private async consumeOAuth2CodeFromBrowserLocation () : Promise<string | undefined> {
     const parser = new SmarterQueryStringUtils();
     const notifier = new AuthorizationNotifier();
     const authorizationHandler = new RedirectRequestHandler(this.storage, parser, window.location)
