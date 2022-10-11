@@ -479,7 +479,7 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
         this.callbacks.error(`${this.authServer} returned a token that expires in ${expiresInSeconds} seconds; minValiditySeconds value of ${this.minValiditySeconds} is unattainable! Token renewal is disabled.`);
     }
 
-    if (this.debug) console.log(`Scheduling renewal in ${renewalDelay} seconds`);
+    if (this.debug) console.log(`@epfl-si/react-appauth: scheduling renewal in ${renewalDelay} seconds`);
     this.stop();
     this.timeout = this.timeouts.setTimeout(async () => {
       try {
