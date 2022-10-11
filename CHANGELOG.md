@@ -1,3 +1,11 @@
+## Version 0.1.6 - 2022-10-11
+
+- Make this package useable from non-TypeScript projects
+- Stop shipping source code as part of the npm package
+- Correct usage of the `core-js` polyfill library
+- Fix harmless TypeScript warnings about JSX
+- Touch up documentation
+
 ## Version 0.1.5 - 2022-10-10
 
 - Earn the TypeScript sticker

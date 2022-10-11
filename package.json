@@ -1,6 +1,6 @@
 {
   "name": "@epfl-si/react-appauth",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "React bindings for @openid/appauth",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
