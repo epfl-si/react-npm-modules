@@ -18,7 +18,7 @@ export interface ContextProps extends OpenIDConnectConfig {
   onNewToken?: (opts : {token: string}) => void;
   onLogout?: () => void;
   minValiditySeconds?: number;
-  children: JSX.Element;
+  children: Array<JSX.Element>;
 }
 
 /**
