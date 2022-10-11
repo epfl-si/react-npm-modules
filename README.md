@@ -18,8 +18,7 @@ An unopinionated React binding for [@openid/appauth](https://www.npmjs.com/packa
   - Obviously, this has a cost with respect to security: no `state=` validation, PKCE is disabled
 - Straightforward, unopinionated React bindings
   - `<OIDCContext>` to pass in configuration and consume “back-office” events (i.e. access tokens)
-  - `useOpenIDConnectContext` React hook to consume “front-office” events (for the appearance of widgets such as the login button)
-    - *Planned feature*: ability to do same with the ID token (for the “hello, ${user}” widget)
+  - `useOpenIDConnectContext` React hook to consume “front-office” events (for the appearance of widgets such as the login button and the “hello, ${user}” widget)
   - Fully unmount-proof: when the `<OIDCContext>` unmounts or changes its props, pending token refresh timers get canceled and callbacks stop calling back.
 - [Demo app](https://github.com/epfl-si/rails.starterkit)
   - ... With a Ruby back-end. But easy enough to set up with no prior knowledge
@@ -80,6 +79,20 @@ export function LoginButton () {
 }
 
 ```
+
+If you would like a “hello, user” widget, you could implement one like this:
+
+```
+
+function HelloUser () {
+  const oidc = useOpenIDConnectContext();
+  if (! oidc.idToken) return <></>;
+  return <p>Welcome, { oidc.idToken.preferred_username! }</p>
+}
+
+```
+
+Put the call to `<HelloUser>` anywhere within the body of the `<OIDCContext>`.
 
 ## Reference manual
 

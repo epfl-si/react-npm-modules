@@ -72,11 +72,21 @@ export enum StateEnum {
   Error = 3
 };
 
+/**
+ * The things that `useOpenIDConnectContext` returns.
+ *
+ * @member state One of the `StateEnum` constants, indicating current logged-in status
+ * @member error The last error encountered by `@epfl-si/react-appauth`, as an english-language string
+ * @member login Call this function to start the login process now
+ * @member login Call this function to start the logout process now
+ * @member idToken The decoded JWT ID token
+ */
 interface State {
   state: StateEnum;
   error?: string;
   login: () => void;
   logout: () => void;
+  idToken?: StringMap;
 }
 
 const context = createContext<State>({
@@ -93,6 +103,7 @@ export const OIDCContext : FC<ContextProps> =
   const [inProgress, setInProgress] = useState<boolean>(true);
   const [error, setLastError] = useState<string>();
   const [token, setToken] = useState<string>();
+  const [idToken, setIdToken] = useState<StringMap>();
 
   const oidcActions = useRef<{login: () => void, logout: () => Promise<void>}>();
   const renew = useTimeout();
@@ -123,8 +134,13 @@ export const OIDCContext : FC<ContextProps> =
       setLastError(`${error}`);
     }
 
+    function onIdToken (idTokenString : string) {
+      setIdToken(decodeJWT(idTokenString));
+    }
+
     await oidc.run({
       accessToken: onChangeToken,
+      idToken: onIdToken,
       logout: () => onChangeToken(undefined),
       error: onError
     });
@@ -139,6 +155,7 @@ export const OIDCContext : FC<ContextProps> =
   return <context.Provider value={
     { state,
       error,
+      idToken,
       login() { oidcActions.current && oidcActions.current.login(); },
       async logout() {
         setInProgress(true);
@@ -160,6 +177,11 @@ interface Callbacks {
    * `Authentication: Bearer ${token}` in your future API calls.
    */
   accessToken: (token: string|undefined) => void;
+  /**
+   * The callback that informs the caller when an ID token
+   * becomes available.
+   */
+  idToken: (token: string | undefined) => void;
   /**
    * The callback that informs the caller that a call to the `logout`
    * method just completed.
@@ -358,6 +380,9 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
    *   checking the signature) and update `this.tokenExpiresEpoch`;
    *   and call `this.callbacks.accessToken(tok)` with it
    *
+   * - If an ID token was obtained, call `this.callbacks.idToken(tok)`
+   *   with it
+   *
    * - If a refresh token is obtained, update `this.refreshToken`
    *
    * @param initialOauth2code The OAuth2 code that was on the
@@ -397,9 +422,13 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
       this.refreshToken = tokens.refreshToken;
     }
 
-    const { accessToken, refreshToken } = tokens;
+    const { accessToken, refreshToken, idToken } = tokens;
 
     this.callbacks.accessToken(accessToken);
+
+    if (idToken) {
+      this.callbacks.idToken(idToken);
+    }
 
     if (refreshToken) {
       this.scheduleRenewal();
