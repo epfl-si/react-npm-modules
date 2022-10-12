@@ -1,3 +1,7 @@
+## Version 0.3.0 - 2022-10-12
+
+- Rename `authServer` prop of `<OIDCContext>` to `authServerUrl`, discarding the old name
+
 ## Version 0.2.2 - 2022-10-12
 
 - Fix: support multiple children to the `<OIDCContext>` React element (for real this time)
