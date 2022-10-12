@@ -1,3 +1,7 @@
+## Version 0.2.2 - 2022-10-12
+
+- Fix: support multiple children to the `<OIDCContext>` React element (for real this time)
+
 ## Version 0.2.1 - 2022-10-11
 
 - Fix: support multiple children to the `<OIDCContext>` React element
