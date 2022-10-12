@@ -1,3 +1,7 @@
+## Version 0.4.0 - 2022-10-12
+
+- `onNewToken` now takes a plain string as its sole parameter
+
 ## Version 0.3.0 - 2022-10-12
 
 - Rename `authServer` prop of `<OIDCContext>` to `authServerUrl`, discarding the old name
