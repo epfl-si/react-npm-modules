@@ -95,7 +95,7 @@ const context = createContext<State>({
 });
 
 export const OIDCContext : FC<ContextProps> =
-  ({ debug, authServer, client, storage,
+  ({ debug, authServerUrl, client, storage,
      minValiditySeconds, onNewToken, onLogout, children }) => {
   if (! minValiditySeconds) minValiditySeconds = 5;
 
@@ -109,7 +109,7 @@ export const OIDCContext : FC<ContextProps> =
 
   useAsyncEffect (async (isActive) => {
     const oidc = new OpenIDConnect(
-      { debug, client, authServer, storage, minValiditySeconds },
+      { debug, client, authServerUrl, storage, minValiditySeconds },
       { setTimeout: renew.start, clearTimeout: renew.stop });
     oidcActions.current = oidc;
 
@@ -144,7 +144,7 @@ export const OIDCContext : FC<ContextProps> =
       error: onError
     });
     setInProgress(false);
-  }, [client, authServer, minValiditySeconds]);
+  }, [client, authServerUrl, minValiditySeconds]);
 
   const state = error !== undefined ? StateEnum.Error :
             inProgress ? StateEnum.InProgress :
@@ -194,7 +194,7 @@ interface Callbacks {
 }
 
 interface OpenIDConnectConfig {
-  authServer: string;
+  authServerUrl: string;
   client: ClientConfig;
   debug?: boolean;
   storage?: StorageBackend;
@@ -216,7 +216,7 @@ interface InjectTimeoutAPI<InjectedTimeoutHandleT> {
  * React-free state machine.
  */
 class OpenIDConnect<InjectedTimeoutHandleT> {
-  private authServer : string;
+  private authServerUrl : string;
   private client : ClientConfig;
   private storage : StorageBackend;
   private fakeStore ?: FakeOAuth2Store;
@@ -225,10 +225,10 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
   private timeouts: InjectTimeoutAPI<InjectedTimeoutHandleT>;
   private timeout: InjectedTimeoutHandleT | undefined;
 
-  constructor({ authServer, client, storage,
+  constructor({ authServerUrl, client, storage,
                  debug, minValiditySeconds } : OpenIDConnectConfig,
               timeouts: InjectTimeoutAPI<InjectedTimeoutHandleT>) {
-    this.authServer = authServer;
+    this.authServerUrl = authServerUrl;
     this.client = client;
     if (storage) {
       this.storage = storage;
@@ -271,7 +271,7 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
       // well-known endpoint, even if it turns out that we are not
       // currently logged in - This is to speed up `login()` later.
       AuthorizationServiceConfiguration.fetchFromIssuer(
-        this.authServer.replace(/\/+$/, ""),
+        this.authServerUrl.replace(/\/+$/, ""),
         new FetchRequestor()
       ).then((config) => {
         this.whenConfigured.resolve(config);
@@ -522,7 +522,7 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
     const expiresInSeconds = this.expiresInSeconds(),
     renewalDelay = expiresInSeconds - this.minValiditySeconds;
     if (renewalDelay <= 0) {
-        this.callbacks.error(`${this.authServer} returned a token that expires in ${expiresInSeconds} seconds; minValiditySeconds value of ${this.minValiditySeconds} is unattainable! Token renewal is disabled.`);
+        this.callbacks.error(`${this.authServerUrl} returned a token that expires in ${expiresInSeconds} seconds; minValiditySeconds value of ${this.minValiditySeconds} is unattainable! Token renewal is disabled.`);
     }
 
     if (this.debug) console.log(`@epfl-si/react-appauth: scheduling renewal in ${renewalDelay} seconds`);

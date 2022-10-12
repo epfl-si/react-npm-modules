@@ -32,7 +32,7 @@ An unopinionated React binding for [@openid/appauth](https://www.npmjs.com/packa
 import { OIDCContext } from "@epfl-si/react-appauth";
 
 export function MyReactComponent() {
-  return <OIDCContext authServer = { "http://localhost:8080/realm/myrealm/" }
+  return <OIDCContext authServerUrl = { "http://localhost:8080/realm/myrealm/" }
                debug = { true }
                client = { { clientId: "myclient",
                             redirectUri: "http://localhost:3000/" } }
