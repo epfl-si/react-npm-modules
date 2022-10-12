@@ -55,10 +55,9 @@ export interface ClientConfig {
    */
   storage?: StorageBackend;
   /**
-   * Any nonstandard configuration parameter to tweak the
-   * authentication server's behavior. Depending on the server's
-   * implementation details, suitable keys could include e.g.
-   * `consent` or `access_type`.
+   * Any nonstandard configuration parameters to tweak the
+   * authentication server's behavior during the authorization
+   * (initial) redirect.
    */
   extras?: StringMap;
 }
