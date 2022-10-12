@@ -1,3 +1,7 @@
+## Version 0.4.1 - 2022-10-12
+
+- Bugfix: missing `import * as React from "react";` in a `.tsx` file
+
 ## Version 0.4.0 - 2022-10-12
 
 - `onNewToken` now takes a plain string as its sole parameter
