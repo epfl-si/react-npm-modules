@@ -1,6 +1,7 @@
 /**
  * OpenID-Connect state machine as a React context
  */
+import * as React from "react";
 import { AuthorizationNotifier, RedirectRequestHandler,
          AuthorizationRequest, AuthorizationError,
          BaseTokenRequestHandler, TokenRequest,
