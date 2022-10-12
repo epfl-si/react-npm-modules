@@ -15,7 +15,7 @@ import { useAsyncEffect } from "use-async-effect";
 import { useTimeout } from "./use_hooks";
 
 export interface ContextProps extends OpenIDConnectConfig {
-  onNewToken?: (opts : {token: string}) => void;
+  onNewToken?: (token: string) => void;
   onLogout?: () => void;
   minValiditySeconds?: number;
   children?: ReactChild | ReactChild[];
@@ -123,7 +123,7 @@ export const OIDCContext : FC<ContextProps> =
         if (onLogout) onLogout();
       } else {
         setLastError(undefined);
-        if (onNewToken) onNewToken({token});
+        if (onNewToken) onNewToken(token);
       }
     }
 
