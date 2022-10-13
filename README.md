@@ -27,11 +27,13 @@ An unopinionated React binding for [@openid/appauth](https://www.npmjs.com/packa
 
 ## How to Use
 
+The various React components (“widgets”) discussed below must be placed within an `<OIDCContext>` near the top of your app, for instance:
+
 ```jsx
 
 import { OIDCContext } from "@epfl-si/react-appauth";
 
-export function MyReactComponent() {
+export function App() {
   return <OIDCContext authServerUrl = { "http://localhost:8080/realm/myrealm/" }
                debug = { true }
                client = { { clientId: "myclient",
@@ -39,6 +41,7 @@ export function MyReactComponent() {
                onNewToken={({ token }) => setFetchHeader("Authorization", `Bearer ${token}`)}
                onLogout={() => setFetchHeader("Authorization", null)}>
       <LoginButton/>
+      <TheRestOfMyApp/>
       </OIDCContext>;
 }
 
@@ -48,7 +51,7 @@ function setFetchHeader (header, value) {
 
 ```
 
-You could write `<LoginButton/>` like this:
+`@epfl-si/react-appauth` exports a ready-made `<LoginButton/>` React element, but you could just as well reimplement it like this:
 
 ```jsx
 
@@ -80,7 +83,21 @@ export function LoginButton () {
 
 ```
 
-If you would like a “hello, user” widget, you could implement one like this:
+If you would like a “hello, user” widget, you will find a couple of building parts in `src/sundry-widgets.tsx` that could come in handy. For instance:
+
+```jsx
+
+import { IfOIDCState, StateEnum, LoggedInUser } from "@epfl-si/react-appauth";
+
+function HelloUser () {
+  return <IfOIDCState is={ StateEnum.LoggedIn }>
+    <p>Welcome, <LoggedInUser field="preferred_username" />!</p>
+  </IfOIDCState>
+}
+
+```
+
+But again, you could just implement it yourself out of `useOIDCContext`:
 
 ```jsx
 
@@ -91,8 +108,6 @@ function HelloUser () {
 }
 
 ```
-
-Put the call to `<HelloUser>` anywhere within the body of the `<OIDCContext>`.
 
 ## Reference manual
 

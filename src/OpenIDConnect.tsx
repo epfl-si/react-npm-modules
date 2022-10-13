@@ -81,7 +81,7 @@ export enum StateEnum {
  * @member login Call this function to start the logout process now
  * @member idToken The decoded JWT ID token
  */
-interface State {
+export interface State {
   state: StateEnum;
   error?: string;
   login: () => void;
