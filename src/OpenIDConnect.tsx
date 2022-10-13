@@ -166,6 +166,20 @@ export const OIDCContext : FC<ContextProps> =
   }>{children}</context.Provider>
 }
 
+/**
+ * React hook to consume the state of the ancestor `<OIDCContext>`.
+ *
+ * Call this function from a React functional component that has an
+ * `<OIDCContext>` as the ancestor (otherwise a dummy, invariable
+ * state will be returned). The return value, `state`, is a `State`
+ * object containing data indicating whether we are logged in
+ * (`state.state`, `state.error`) and who is logged in
+ * (`state.idToken`); as well as actuator methods that your UI (e.g.
+ * your login button's `onClick`) might want to call (`state.login()`
+ * and `state.logout()`).
+ *
+ * @see State
+ */
 export function useOpenIDConnectContext () {
   return useContext<State>(context);
 }
