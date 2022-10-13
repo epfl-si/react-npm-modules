@@ -1,3 +1,7 @@
+## Version 0.5.1 - 2022-10-13
+
+- Correct the TS type of “a bunch of React nodes”, used in various places
+
 ## Version 0.5.0 - 2022-10-13
 
 - Introduce sundry React widgets such as `<LoginButton/>` and `<IfOIDCState is={ StateEnum.LoggedIn }>...</IfOIDCState>`
