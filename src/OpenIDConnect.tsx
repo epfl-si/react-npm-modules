@@ -11,7 +11,7 @@ import { AuthorizationNotifier, RedirectRequestHandler,
          RevokeTokenRequest,
          LocalStorageBackend, StorageBackend, UnderlyingStorage,
          BasicQueryStringUtils, LocationLike } from "@openid/appauth";
-import { ReactChild, FC, useState, useRef, createContext, useContext } from "react";
+import { ReactNode, FC, useState, useRef, createContext, useContext } from "react";
 import { useAsyncEffect } from "use-async-effect";
 import { useTimeout } from "./use_hooks";
 
@@ -19,7 +19,7 @@ export interface ContextProps extends OpenIDConnectConfig {
   onNewToken?: (token: string) => void;
   onLogout?: () => void;
   minValiditySeconds?: number;
-  children?: ReactChild | ReactChild[];
+  children?: ReactNode;
 }
 
 /**

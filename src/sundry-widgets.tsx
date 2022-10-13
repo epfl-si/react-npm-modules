@@ -6,11 +6,9 @@
  */
 
 import * as React from "react";
-import { ReactChild, FC } from "react";
+import { ReactNode, FC } from "react";
 
 import { State, StateEnum, useOpenIDConnectContext } from "./OpenIDConnect";
-
-type ReactElements = ReactChild | ReactChild[];
 
 /////////////////////////////////  IfOIDCState /////////////////////////////////////////////
 
@@ -19,7 +17,7 @@ type ReactElements = ReactChild | ReactChild[];
  * state machine is currently in a given condition.
  */
 export function IfOIDCState (props : {
-  children?: ReactElements,
+  children?: ReactNode,
   is?: StateEnum,
   isnt?: StateEnum,
   isOneOf ?: StateEnum[],
@@ -66,14 +64,14 @@ export function LoggedInUser (props : { field : string }) {
 /////////////////////////////////  LoginButton /////////////////////////////////////////////
 
 export interface LoginButtonTexts {
-  label : ReactElements;
+  label : ReactNode;
   tooltip : string;
 }
 
 export interface LoginButtonProps {
-  inProgressLabel ?: ReactElements | ((oidc : State) => ReactElements),
-  loginLabel      ?: ReactElements | ((oidc : State) => ReactElements),
-  logoutLabel     ?: ReactElements | ((oidc : State) => ReactElements),
+  inProgressLabel ?: ReactNode | ((oidc : State) => ReactNode),
+  loginLabel      ?: ReactNode | ((oidc : State) => ReactNode),
+  logoutLabel     ?: ReactNode | ((oidc : State) => ReactNode),
   loginTooltip    ?: string | ((oidc : State) => string),
   logoutTooltip   ?: string | ((oidc : State) => string),
   className       ?: string | ((oidc : State) => string),
@@ -133,7 +131,7 @@ export function LoginButton (props : LoginButtonProps) {
   function getString (stringGiver ?: string | ((oidc : State) => string)) {
     return typeof(stringGiver) === 'function' ? stringGiver(oidc) : stringGiver;
   }
-  function getElements (elementGiver ?: ReactElements | ((oidc : State) => ReactElements)) {
+  function getElements (elementGiver ?: ReactNode | ((oidc : State) => ReactNode)) {
     return typeof(elementGiver) === 'function' ? elementGiver(oidc) : elementGiver;
   }
 }
