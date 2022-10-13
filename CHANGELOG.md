@@ -1,3 +1,7 @@
+## Version 0.5.0 - 2022-10-13
+
+- Introduce sundry React widgets such as `<LoginButton/>` and `<IfOIDCState is={ StateEnum.LoggedIn }>...</IfOIDCState>`
+
 ## Version 0.4.1 - 2022-10-12
 
 - Bugfix: missing `import * as React from "react";` in a `.tsx` file
