@@ -1,3 +1,7 @@
+## Version 0.6.0 - 2022-10-21
+
+- Crude ability to mute the `console.log` stream of `@openid/appauth`
+
 ## Version 0.5.1 - 2022-10-13
 
 - Correct the TS type of “a bunch of React nodes”, used in various places
