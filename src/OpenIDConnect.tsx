@@ -2,6 +2,7 @@
  * OpenID-Connect state machine as a React context
  */
 import * as React from "react";
+import { ReactNode, FC, useState, useRef, createContext, useContext } from "react";
 import { AuthorizationNotifier, RedirectRequestHandler,
          AuthorizationRequest, AuthorizationError,
          BaseTokenRequestHandler, TokenRequest,
@@ -11,7 +12,6 @@ import { AuthorizationNotifier, RedirectRequestHandler,
          RevokeTokenRequest,
          LocalStorageBackend, StorageBackend, UnderlyingStorage,
          BasicQueryStringUtils, LocationLike } from "@openid/appauth";
-import { ReactNode, FC, useState, useRef, createContext, useContext } from "react";
 import { useAsyncEffect } from "use-async-effect";
 import { useTimeout } from "./use_hooks";
 
