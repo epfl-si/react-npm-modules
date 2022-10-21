@@ -49,8 +49,8 @@ export interface ClientConfig {
    * `LocalStorageBackend` is re-rexported from `@openid/appauth`),
    * will result in the browser performing a fully-compliant OAuth2
    * authorization code flow with working `state=` and PKCE checks.
-   * This in turn requires to use browser storage, which will be of
-   * the `window.localStorage` or `window.sessionStorage` variety,
+   * This in turn requires browser storage, which will be of the
+   * `window.localStorage` or `window.sessionStorage` variety,
    * respectively. By default, no browser storage is used, and
    * (therefore) `state=` checks and PKCE are both disabled.
    */
