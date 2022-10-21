@@ -14,6 +14,7 @@ import { AuthorizationNotifier, RedirectRequestHandler,
          BasicQueryStringUtils, LocationLike } from "@openid/appauth";
 import { useAsyncEffect } from "use-async-effect";
 import { useTimeout } from "./use_hooks";
+import { setOpenIdAppauthLogging } from "./hack-logging-level";
 
 export interface ContextProps extends OpenIDConnectConfig {
   onNewToken?: (token: string) => void;
@@ -282,6 +283,8 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
   public async run (callbacks: Callbacks) : Promise<boolean> {
     this.callbacks = callbacks;
     try {
+      await setOpenIdAppauthLogging(this.debug);
+
       // Start the process to fetch OIDC configuration from the
       // well-known endpoint, even if it turns out that we are not
       // currently logged in - This is to speed up `login()` later.
