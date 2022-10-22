@@ -15,6 +15,7 @@ import { AuthorizationNotifier, RedirectRequestHandler,
 import { useAsyncEffect } from "use-async-effect";
 import { useTimeout } from "./use_hooks";
 import { setOpenIdAppauthLogging } from "./hack-logging-level";
+import Resolvable from 'resolvable-promise';
 
 export interface ContextProps extends OpenIDConnectConfig {
   onNewToken?: (token: string) => void;
@@ -269,7 +270,7 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
     this.timeouts = timeouts;
   }
 
-  private whenConfigured : ResolvablePromise<AuthorizationServiceConfiguration> = new ResolvablePromise();
+  private whenConfigured = new Resolvable<AuthorizationServiceConfiguration>();
   private callbacks : Callbacks;
   /**
    * Start the token fetch and renewal process. Awaits the first
@@ -663,31 +664,4 @@ function decodeJWT(jwt : string) : StringMap {
   }).join(''));
 
   return JSON.parse(jsonPayload);
-}
-
-/**
- * A Promise-like object that also has `.resolve()` and `.reject()`
- * methods.
- */
-class ResolvablePromise<T> implements PromiseLike<T> {
-  public resolve : (result : T) => void;
-  public reject : (error : Error) => void;
-  // Surely there is a better way to placate the TypeScript warning,
-  // than to copy the next two lines straight out of
-  // node_modules/typescript/lib/lib.es5.d.ts (and replace `:`s with
-  // `=>`s) as I did?
-  public then : <TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null) => PromiseLike<TResult1 | TResult2>;;
-  public catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null) => Promise<T | TResult>;
-
-  constructor () {
-    const p = new Promise((resolve, reject) => {
-      // See
-      // https://gist.github.com/domenic/8ed6048b187ee8f2ec75?permalink_comment_id=2297518#gistcomment-2297518
-      // to find out why just `this.resolve = resolve` wouldn't work.
-      this.resolve = (result) => resolve(result);
-      this.reject = (error) => reject(error);
-    });
-    this.then = p.then.bind(p);
-    this.catch = p.then.bind(p);
-  }
 }
