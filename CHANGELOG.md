@@ -1,3 +1,8 @@
+## Version 0.7.0 - 2022-10-21
+
+- `useOpenIDConnectContext` return value now has a `.accessToken` field
+- New dependency on [`resolvable-promise`](https://www.npmjs.com/package/resolvable-promise)
+
 ## Version 0.6.0 - 2022-10-21
 
 - Crude ability to mute the `console.log` stream of `@openid/appauth`
