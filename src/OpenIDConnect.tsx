@@ -80,6 +80,8 @@ export enum StateEnum {
  * @member error The last error encountered by `@epfl-si/react-appauth`, as an english-language string
  * @member login Call this function to start the login process now
  * @member login Call this function to start the logout process now
+ * @member accessToken The last known OIDC access token (to send to the backend server), or undefined
+ *                     if we are currently logged out
  * @member idToken The decoded JWT ID token
  */
 export interface State {
@@ -87,6 +89,7 @@ export interface State {
   error?: string;
   login: () => void;
   logout: () => void;
+  accessToken?: string;
   idToken?: StringMap;
 }
 
@@ -103,7 +106,7 @@ export const OIDCContext : FC<ContextProps> =
 
   const [inProgress, setInProgress] = useState<boolean>(true);
   const [error, setLastError] = useState<string>();
-  const [token, setToken] = useState<string>();
+  const [accessToken, setAccessToken] = useState<string>();
   const [idToken, setIdToken] = useState<StringMap>();
 
   const oidcActions = useRef<{login: () => void, logout: () => Promise<void>}>();
@@ -115,17 +118,17 @@ export const OIDCContext : FC<ContextProps> =
       { setTimeout: renew.start, clearTimeout: renew.stop });
     oidcActions.current = oidc;
 
-    function onChangeToken (token: string) {
+    function onChangeToken (accessToken: string) {
       if (! isActive()) {
         // Too late! React doesn't care anymore.
         return;
       }
-      setToken(token);
-      if (token === undefined) {
+      setAccessToken(accessToken);
+      if (accessToken === undefined) {
         if (onLogout) onLogout();
       } else {
         setLastError(undefined);
-        if (onNewToken) onNewToken(token);
+        if (onNewToken) onNewToken(accessToken);
       }
     }
 
@@ -150,12 +153,13 @@ export const OIDCContext : FC<ContextProps> =
 
   const state = error !== undefined ? StateEnum.Error :
             inProgress ? StateEnum.InProgress :
-            token === undefined ? StateEnum.LoggedOut :
+            accessToken === undefined ? StateEnum.LoggedOut :
                  StateEnum.LoggedIn;
 
   return <context.Provider value={
     { state,
       error,
+      accessToken,
       idToken,
       login() { oidcActions.current && oidcActions.current.login(); },
       async logout() {
