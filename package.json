@@ -58,6 +58,7 @@
   "dependencies": {
     "@openid/appauth": "^1.3.1",
     "core-js": "^3.25.5",
+    "resolvable-promise": "^2.0.3",
     "use-async-effect": "^2.2.7"
   }
 }
