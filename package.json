@@ -1,7 +1,8 @@
 {
   "private": true,
   "workspaces": [
-    "react-appauth"
+    "react-appauth",
+    "react-graphql-simple"
   ],
   "scripts": {
     "build": "set -e -x; yarn; rm -rf */dist; yarn workspaces run build"

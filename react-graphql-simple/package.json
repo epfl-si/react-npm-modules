@@ -1,0 +1,40 @@
+{
+  "name": "@epfl-si/react-graphql-simple",
+  "version": "0.1.0",
+  "description": "Await authentication then perform GraphQL requests",
+  "main": "dist/graphql-simple.js",
+  "types": "dist/graphql-simple.d.ts",
+  "scripts": {
+    "build": "set -e -x; export NODE_ENV=production; babel --root-mode upward graphql-simple.tsx --out-dir dist --source-maps; tsc --project ../tsconfig.json"
+  },
+  "files": [
+    "dist/**"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/epfl-si/react-npm-modules.git"
+  },
+  "keywords": [
+    "graphql",
+    "react",
+    "authorization",
+    "bearer"
+  ],
+  "author": "EPFL ISAS-FSD <isas-fsd@groupes.epfl.ch>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/epfl-si/react-npm-modules/issues"
+  },
+  "homepage": "https://github.com/epfl-si/react-npm-modules#readme",
+  "dependencies": {
+    "graphql": "^16.6.0",
+    "graphql-request": "^5.0.0",
+    "resolvable-promise": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.25"
+  },
+  "peerDependencies": {
+    "react": "15 - 19"
+  }
+}
