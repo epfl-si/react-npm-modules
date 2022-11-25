@@ -1,7 +1,8 @@
 # `@epfl-si/react-graphql-paginated`
 
-Like [`@epfl-si/react-graphql-simple`](https://www.npmjs.com/package/@epfl-si/react-graphql-simple), but with an extra helping of [`@tanstack/react-query`](https://tanstack.com/query/v4) for `useInfiniteQuery` goodness.
+Like [`@epfl-si/react-graphql-simple`](https://www.npmjs.com/package/@epfl-si/react-graphql-simple), but with an extra helping of [`@tanstack/react-query`](https://tanstack.com/query/v4) for `useInfiniteGraphQLQuery` goodness.
 
+- All bells and whistles of [`@tanstack/react-query`] are turned off by default — But you can turn them back on, if you want.
 - For now, only [relay-style pagination](https://dev.to/mandiwise/graphql-pagination-primer-offset-vs-cursor-vs-relay-style-pagination-1a60) is provided - Meaning that your GraphQL server must support it.
 
 ## Provide a GraphQL context
@@ -26,9 +27,9 @@ function App() {
 }
 ```
 
-## Perform GraphQL requests within the context
+## Perform GraphQL requests from within the context
 
-A `<QueryClientGraphQLProvider>` component works just the same as a `<GraphQLProvider>` component; in particular, one can call `@epfl-si/react-graphql-simple`'s `useGraphQLRequest` from within it. Additionally, the `useInfiniteGraphQLQuery` React hook may be called from within its children elements:
+A `<QueryClientGraphQLProvider>` component works just the same as a `<GraphQLProvider>` component from `@epfl-si/react-graphql-simple`; in particular, one can call `useGraphQLRequest` from within it. Additionally, the children elements may call the `useInfiniteGraphQLQuery` React hook, which is built around `@tanstack/react-query`'s `useInfiniteQuery`. For example:
 
 ```tsx
 import * as React from "react";
@@ -72,6 +73,7 @@ query Items ($cursor : String) {
   ))}</>
   <button onclick={ () => fetchNextPage }>Moar</button>
   </div>;
+}
 ```
 
 💡 Instead of (or in addition to) the clickable `<button>` at the end, one could attach a [`react-intersection-observer`](https://www.npmjs.com/package/react-intersection-observer) to a DOM element situated at the end of the list, so that `fetchNextPage()` is called automatically as soon as said DOM element becomes visible within the browser viewport. This would deliver infinite scrolling for your `useInfiniteGraphQLQuery`.
