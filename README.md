@@ -14,3 +14,7 @@ git commit -a
 </pre>
 
 
+## Publish everything
+
+<pre>yarn publish
+</pre>

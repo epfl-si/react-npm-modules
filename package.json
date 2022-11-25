@@ -5,6 +5,7 @@
     "react-graphql-simple"
   ],
   "scripts": {
+    "release": "set -e -x; yarn ; changeset publish",
     "build": "set -e -x; yarn; rm -rf */dist; yarn workspaces run build"
   },
   "devDependencies": {
