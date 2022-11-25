@@ -1,7 +1,7 @@
 {
   "name": "@epfl-si/react-graphql-paginated",
   "version": "0.1.0",
-  "description": "@epfl-si/react-graphql-paginated + @tanstack/react-query",
+  "description": "Like @epfl-si/react-graphql-simple, but with pagination / infinite queries",
   "main": "dist/graphql-paginated.js",
   "types": "dist/graphql-paginated.d.ts",
   "scripts": {
