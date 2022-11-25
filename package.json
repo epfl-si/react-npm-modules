@@ -1,0 +1,17 @@
+{
+  "name": "@epfl-si/react-npm-packages",
+  "description": "A range of NPM modules that make life simpler for EPFL-SI React developers ",
+  "packageManager": "yarn@^3",
+  "devDependencies": {
+    "@babel/cli": "^7.19.3",
+    "@babel/core": "^7.19.3",
+    "@babel/preset-env": "^7.19.4",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/preset-typescript": "^7.18.6",
+    "typescript": "^4.8.4"
+  },
+  "workspaces": [
+    "react-appauth"
+  ],
+  "version": "0.0.0"
+}
