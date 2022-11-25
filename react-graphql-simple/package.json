@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/epfl-si/react-npm-modules#readme",
   "dependencies": {
+    "@epfl-si/react-appauth": "^0.7.0",
     "graphql": "^16.6.0",
     "graphql-request": "^5.0.0",
     "resolvable-promise": "^3.0.0"
