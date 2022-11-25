@@ -1,0 +1,43 @@
+{
+  "name": "@epfl-si/react-graphql-paginated",
+  "version": "0.1.0",
+  "description": "@epfl-si/react-graphql-paginated + @tanstack/react-query",
+  "main": "dist/graphql-paginated.js",
+  "types": "dist/graphql-paginated.d.ts",
+  "scripts": {
+    "build": "set -e -x; export NODE_ENV=production; babel --root-mode upward graphql-paginated.tsx --extensions .tsx --out-dir dist --source-maps; tsc --project tsconfig.build.json"
+  },
+  "files": [
+    "dist/**"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/epfl-si/react-npm-modules.git"
+  },
+  "keywords": [
+    "graphql",
+    "react",
+    "pagination",
+    "infinite-query"
+  ],
+  "author": "EPFL ISAS-FSD <isas-fsd@groupes.epfl.ch>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/epfl-si/react-npm-modules/issues"
+  },
+  "homepage": "https://github.com/epfl-si/react-npm-modules#readme",
+  "dependencies": {
+    "@epfl-si/react-graphql-simple": "^0.2.2",
+    "graphql-request": "^5.0.0",
+    "@tanstack/react-query": "^4.13.5"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.25"
+  },
+  "peerDependencies": {
+    "react": "15 - 19"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

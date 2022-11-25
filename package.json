@@ -2,7 +2,8 @@
   "private": true,
   "workspaces": [
     "react-appauth",
-    "react-graphql-simple"
+    "react-graphql-simple",
+    "react-graphql-paginated"
   ],
   "scripts": {
     "release": "set -e -x; yarn build ; changeset publish",
