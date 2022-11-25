@@ -38,7 +38,7 @@ interface JavascriptTimerAPI {
 function useJavascriptTimer(setIntervalOrTimeout: typeof setInterval,
                             clearIntervalOrTimeout: typeof clearInterval)
 : JavascriptTimerAPI{
-  const id = useRef<number>();
+  const id = useRef<ReturnType<typeof setInterval>>();
 
   const api : JavascriptTimerAPI = {
     start(fn, millis) {
