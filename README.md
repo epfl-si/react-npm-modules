@@ -6,3 +6,11 @@ This is a [Yarn monorepo](https://yarnpkg.com/features/workspaces) for a number 
 
 <pre>yarn changeset
 </pre>
+
+## Aggregate changelog entries and prepare for new releases
+
+<pre>yarn changeset version
+git commit -a
+</pre>
+
+
