@@ -1,6 +1,6 @@
 {
   "name": "@epfl-si/react-graphql-simple",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Await authentication then perform GraphQL requests",
   "main": "dist/graphql-simple.js",
   "types": "dist/graphql-simple.d.ts",

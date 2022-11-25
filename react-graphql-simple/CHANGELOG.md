@@ -1,5 +1,11 @@
 # @epfl-si/react-graphql-simple
 
+## 0.2.3
+
+### Patch Changes
+
+- Document
+
 ## 0.2.2
 
 ### Patch Changes
