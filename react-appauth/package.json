@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "set -e -x; export NODE_ENV=production; babel --root-mode upward src/* --out-dir dist --extensions '.ts,.tsx' --source-maps; tsc --project ../tsconfig.json"
+    "build": "set -e -x; export NODE_ENV=production; babel --root-mode upward src/* --out-dir dist --extensions '.ts,.tsx' --source-maps; tsc --project tsconfig.build.json"
   },
   "files": [
     "dist/**"
