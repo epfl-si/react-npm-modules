@@ -372,13 +372,13 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
   }
 
   private refreshToken : string;
-  private accessTokenExpiresEpoch : number;
+  private tokenExpiresEpoch : number;
   /**
    * Perform an OAuth2 Access Token or Refresh Token request.
    *
-   * Depending on whether the `initialOauth2code` method parameter is
-   * set or not, the query sent to the authentication server will be
-   * the access token request of an OAuth2 Authorization Code Grant
+   * Depending on whether the `initialOauth2code` parameter is set by
+   * caller, the query sent to the authentication server will be the
+   * access token request of an OAuth2 Authorization Code Grant
    * (RFC6749, section 4.1.3) or a refresh request of same (ibid,
    * section 6):
    *
@@ -398,12 +398,12 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
    * phase happens immediately afterwards; all the steps described below
    * happen before the `obtainAndDispatchTokens` promise completes:
    *
-   * - If an access token was obtained, parse its JWT state (without
-   *   checking the signature) and update `this.tokenExpiresEpoch`;
-   *   and call `this.callbacks.accessToken(tok)` with it
+   * - If an access token was obtained, call
+   *   `this.callbacks.accessToken(tok)` with it
    *
-   * - If an ID token was obtained, call `this.callbacks.idToken(tok)`
-   *   with it
+   * - If an ID token was obtained, parse its JWT state (without
+   *   checking the signature), update `this.tokenExpiresEpoch`, and
+   *   call `this.callbacks.idToken(tok)` with it
    *
    * - If a refresh token is obtained, update `this.refreshToken`
    *
@@ -430,11 +430,11 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
 
     const tokens = await tokenHandler.performTokenRequest(config, request);
 
-    if (tokens.accessToken) {
+    if (tokens.idToken) {
       try {
-        const { exp } = decodeJWT(tokens.accessToken);
+        const { exp } = decodeJWT(tokens.idToken);
         if (exp) {
-          this.accessTokenExpiresEpoch = parseInt(exp);
+          this.tokenExpiresEpoch = parseInt(exp);
         }
       } catch (e) {
         console.error("Unable to parse JWT access token", e);
@@ -509,7 +509,7 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
       await this.revokeTokens();
     } finally {
       this.refreshToken = undefined;
-      this.accessTokenExpiresEpoch = undefined;
+      this.tokenExpiresEpoch = undefined;
       this.callbacks.logout();
     }
   }
@@ -536,7 +536,7 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
    * Behavior is undefined if there is no current token.
    */
   public expiresInSeconds(): number {
-    return this.accessTokenExpiresEpoch - (new Date().getTime() / 1000);
+    return this.tokenExpiresEpoch - (new Date().getTime() / 1000);
   }
 
   private scheduleRenewal() {
