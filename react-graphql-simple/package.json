@@ -1,6 +1,6 @@
 {
   "name": "@epfl-si/react-graphql-simple",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Await authentication then perform GraphQL requests",
   "main": "dist/graphql-simple.js",
   "types": "dist/graphql-simple.d.ts",
@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/epfl-si/react-npm-modules#readme",
   "dependencies": {
-    "@epfl-si/react-appauth": "^0.7.0",
+    "@epfl-si/react-appauth": "^0.8.0",
     "graphql": "^16.6.0",
     "graphql-request": "^5.0.0",
     "resolvable-promise": "^3.0.0"

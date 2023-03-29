@@ -1,5 +1,11 @@
 ## Version 0.7.0 - 2022-10-21
 
+## 0.8.0
+
+### Minor Changes
+
+- Parse ID token (not access token) with JWT
+
 - `useOpenIDConnectContext` return value now has a `.accessToken` field
 - New dependency on [`resolvable-promise`](https://www.npmjs.com/package/resolvable-promise)
 
