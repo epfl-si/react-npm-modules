@@ -1,3 +1,9 @@
+## 0.8.0
+
+### Minor Changes
+
+- Parse ID token (not access token) with JWT
+
 ## Version 0.7.0 - 2022-10-21
 
 - `useOpenIDConnectContext` return value now has a `.accessToken` field
