@@ -539,7 +539,7 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
     return this.tokenExpiresEpoch - (new Date().getTime() / 1000);
   }
 
-  private scheduleRenewal() {
+  private scheduleRenewal(): void {
     if (! this.minValiditySeconds) return;
 
     const expiresInSeconds = this.expiresInSeconds(),
