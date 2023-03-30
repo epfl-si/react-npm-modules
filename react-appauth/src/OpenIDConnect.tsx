@@ -20,6 +20,7 @@ import Resolvable from 'resolvable-promise';
 export interface ContextProps extends OpenIDConnectConfig {
   onNewToken?: (token: string) => void;
   onLogout?: () => void;
+  onInitialAuthComplete: () => void;
   minValiditySeconds?: number;
   children?: ReactNode;
 }
@@ -102,10 +103,18 @@ const context = createContext<State>({
 
 export const OIDCContext : FC<ContextProps> =
   ({ debug, authServerUrl, client, storage,
-     minValiditySeconds, onNewToken, onLogout, children }) => {
+     minValiditySeconds, onNewToken, onLogout, onInitialAuthComplete,
+   children }) => {
   if (! minValiditySeconds) minValiditySeconds = 5;
 
-  const [inProgress, setInProgress] = useState<boolean>(true);
+  const [inProgress, setInProgress_] = useState<boolean>(true);
+  function setInProgress (newValue : boolean) : void {
+    setInProgress_(newValue);
+    if (onInitialAuthComplete && newValue === false) {
+      onInitialAuthComplete();
+      onInitialAuthComplete = undefined;
+    }
+  }
   const [error, setLastError] = useState<string>();
   const [accessToken, setAccessToken] = useState<string>();
   const [idToken, setIdToken] = useState<StringMap>();
