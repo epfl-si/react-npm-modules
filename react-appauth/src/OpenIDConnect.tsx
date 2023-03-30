@@ -80,7 +80,7 @@ export enum StateEnum {
  * @member state One of the `StateEnum` constants, indicating current logged-in status
  * @member error The last error encountered by `@epfl-si/react-appauth`, as an english-language string
  * @member login Call this function to start the login process now
- * @member login Call this function to start the logout process now
+ * @member logout Call this function to start the logout process now
  * @member accessToken The last known OIDC access token (to send to the backend server), or undefined
  *                     if we are currently logged out
  * @member idToken The decoded JWT ID token
