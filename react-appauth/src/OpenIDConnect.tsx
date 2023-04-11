@@ -20,7 +20,7 @@ import Resolvable from 'resolvable-promise';
 export interface ContextProps extends OpenIDConnectConfig {
   onNewToken?: (token: string) => void;
   onLogout?: () => void;
-  onInitialAuthComplete: () => void;
+  onInitialAuthComplete?: () => void;
   minValiditySeconds?: number;
   children?: ReactNode;
 }
