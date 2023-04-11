@@ -1,5 +1,11 @@
 ## 0.8.0
 
+## 0.8.2
+
+### Patch Changes
+
+- Fix typing problem: `onInitialAuthComplete` is optional
+
 ## 0.8.1
 
 ### Patch Changes
