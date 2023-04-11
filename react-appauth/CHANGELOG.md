@@ -1,5 +1,11 @@
 ## 0.8.0
 
+## 0.8.1
+
+### Patch Changes
+
+- Documentation updates
+
 ### Minor Changes
 
 - Parse ID token (not access token) with JWT
