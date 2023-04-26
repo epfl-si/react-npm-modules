@@ -38,7 +38,7 @@ export function App() {
                debug = { true }
                client = { { clientId: "myclient",
                             redirectUri: "http://localhost:3000/" } }
-               onNewToken={({ token }) => setFetchHeader("Authorization", `Bearer ${token}`)}
+               onNewToken={(token) => setFetchHeader("Authorization", `Bearer ${token}`)}
                onLogout={() => setFetchHeader("Authorization", null)}>
       <LoginButton/>
       <TheRestOfMyApp/>
