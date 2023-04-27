@@ -105,6 +105,34 @@ const context = createContext<State>({
   logout: () => {}
 });
 
+/**
+ * OpenID-Connect state machine as a React context.
+ *
+ * Perform the operations dictated by the OpenID-Connect specification
+ * once at the time the component is created, so as to determine
+ * logged-in or logged-out status on behalf of {@link
+ * useOpenIDConnectContext}. Said operations consist of the following
+ * steps:
+ *
+ * - consume any OpenID-Connect credentials out
+ *   of the browser URL bar (`code=`, `state=`, `error=` and
+ *   `session_state=`), regardless of whether they are found in the
+ *   “query” or “fragment” part
+ *
+ * - redeem these OpenID-Connect credentials with the authorization
+ *   server, in exchange for an authorization token and (optionally) an
+ *   ID token
+ *
+ * - communicate the success or failure of the previous steps through
+ *   the `onInitialAuthComplete` callback and either the `onNewToken`
+ *   or the `onLogout` callback
+ *
+ * - arrange for timely token renewal
+ *
+ * This is a React context, meaning that one may use the matching
+ * {@link useOpenIDConnectContext} React hook to consume the
+ * authentication state from any descendant component.
+ */
 export const OIDCContext : FC<ContextProps> =
   ({ debug, authServerUrl, client, storage,
      minValiditySeconds, onNewToken, onLogout, onInitialAuthComplete,
