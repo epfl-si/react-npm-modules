@@ -36,8 +36,7 @@ import { OIDCContext } from "@epfl-si/react-appauth";
 export function App() {
   return <OIDCContext authServerUrl = { "http://localhost:8080/realm/myrealm/" }
                debug = { true }
-               client = { { clientId: "myclient",
-                            redirectUri: "http://localhost:3000/" } }
+               client = { { clientId: "myclient" } }
                onNewToken={(token) => setFetchHeader("Authorization", `Bearer ${token}`)}
                onLogout={() => setFetchHeader("Authorization", null)}>
       <LoginButton/>
