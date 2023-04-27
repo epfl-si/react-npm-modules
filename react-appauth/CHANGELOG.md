@@ -1,4 +1,3 @@
-## 0.8.0
 
 ## 0.9.0
 
@@ -19,6 +18,8 @@
 ### Patch Changes
 
 - Documentation updates
+
+## 0.8.0
 
 ### Minor Changes
 
