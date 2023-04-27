@@ -132,6 +132,13 @@ const context = createContext<State>({
  * This is a React context, meaning that one may use the matching
  * {@link useOpenIDConnectContext} React hook to consume the
  * authentication state from any descendant component.
+ *
+ * Note that contrary to a “typical” React component, an
+ * `<OIDCContext>` does *not* destroy its state when its props change
+ * (even “important” props like `authServerUrl`), as doing so would
+ * typically result in logging the user out. If you do want that to
+ * happen, you must arrange to call
+ * `useOpenIDConnectContext().logout()` by yourself.
  */
 export const OIDCContext : FC<ContextProps> =
   ({ debug, authServerUrl, client, storage,
@@ -154,7 +161,7 @@ export const OIDCContext : FC<ContextProps> =
   const oidcActions = useRef<{login: () => void, logout: () => Promise<void>}>();
   const renew = useTimeout();
 
-  useAsyncEffect (async (isActive) => {
+  useAsyncEffect(async (isActive) => {
     const oidc = new OpenIDConnect(
       { debug, client, authServerUrl, storage, minValiditySeconds },
       { setTimeout: renew.start, clearTimeout: renew.stop });
@@ -191,7 +198,12 @@ export const OIDCContext : FC<ContextProps> =
       error: onError
     });
     setInProgress(false);
-  }, [client, authServerUrl, minValiditySeconds]);
+  },
+                 // We *do not* want the `useAsyncEffect` callback above
+                 // to re-run willy-nilly, as that will cause the OpenID
+                 // process to start over i.e. the user will typically
+                 // be logged out. See the OIDCContext docstring, above:
+                 []);
 
   const state = error !== undefined ? StateEnum.Error :
             inProgress ? StateEnum.InProgress :
