@@ -110,4 +110,4 @@ function HelloUser () {
 
 ## Reference manual
 
-There, um, isn't one currently. But there is [some JSDoc in the source code](https://github.com/epfl-si/react-npm-modules/blob/master/react-appauth/src/OpenIDConnect.tsx).
+[See `API.md` on GitHub](https://github.com/epfl-si/react-npm-modules/blob/master/react-appauth/API.md)
