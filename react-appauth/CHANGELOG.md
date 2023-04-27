@@ -1,3 +1,12 @@
+## 0.10.0
+
+### Minor Changes
+
+- OIDCContext: do _not_ auto-logout on prop change.
+
+  We discovered a bug caused by a [well-known React pitfall](https://react.dev/reference/react/useEffect#removing-unnecessary-object-dependencies) whence any change in any unrelated prop (including `children`) would cause a logout.
+
+  Upon further reflection on the desirablity (or rather, lack thereof) of the logout behavior, make it so `OIDCContext` avoids doing that inasmuch as possible; that is, it won't log the user out unless and until it is destroyed in full. If this is not the desired behavior, arrange to call `useOpenIDConnectContext().logout()` by yourself.
 
 ## 0.9.0
 
