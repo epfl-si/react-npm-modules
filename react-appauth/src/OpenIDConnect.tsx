@@ -25,13 +25,19 @@ export interface ContextProps extends OpenIDConnectConfig {
   children?: ReactNode;
 }
 
+let _HACK_KEEP_THIS_JSDOC = 1;
 /**
+ * @typedef {Object} ClientConfig
  * The set of information that the client (browser) will send to the
  * OIDC authentication server upon initiation of the OpenID-connect
  * machinery.
+ *
+ * @property {string} clientId - The name the client is registered as in the OIDC authentication server
+ *
  */
+_HACK_KEEP_THIS_JSDOC = _HACK_KEEP_THIS_JSDOC * 1;
+
 export interface ClientConfig {
-  /** The name the client is registered as in the OIDC authentication server */
   clientId: string;
   /** A secret that identifies this particular client to the authentication server. */
   clientSecret ?: string;
@@ -80,16 +86,19 @@ export enum StateEnum {
 };
 
 /**
+ * @typedef {Object} State
  * The things that `useOpenIDConnectContext` returns.
  *
- * @member state One of the `StateEnum` constants, indicating current logged-in status
- * @member error The last error encountered by `@epfl-si/react-appauth`, as an english-language string
- * @member login Call this function to start the login process now
- * @member logout Call this function to start the logout process now
- * @member accessToken The last known OIDC access token (to send to the backend server), or undefined
+ * @property { StateEnum } state - One of the `StateEnum` constants, indicating current logged-in status
+ * @property { string } error - The last error encountered by `@epfl-si/react-appauth`, as an english-language string
+ * @property { Function } login - Call this function to start the login process now
+ * @property { Function } logout - Call this function to start the logout process now
+ * @property { string } accessToken - The last known OIDC access token (to send to the backend server), or undefined
  *                     if we are currently logged out
- * @member idToken The decoded JWT ID token
+ * @property { Object } idToken - The decoded JWT ID token
  */
+_HACK_KEEP_THIS_JSDOC = _HACK_KEEP_THIS_JSDOC * 1;
+
 export interface State {
   state: StateEnum;
   error?: string;
@@ -118,15 +127,12 @@ const context = createContext<State>({
  *   of the browser URL bar (`code=`, `state=`, `error=` and
  *   `session_state=`), regardless of whether they are found in the
  *   “query” or “fragment” part
- *
  * - redeem these OpenID-Connect credentials with the authorization
  *   server, in exchange for an authorization token and (optionally) an
  *   ID token
- *
  * - communicate the success or failure of the previous steps through
  *   the `onInitialAuthComplete` callback and either the `onNewToken`
  *   or the `onLogout` callback
- *
  * - arrange for timely token renewal
  *
  * This is a React context, meaning that one may use the matching
@@ -237,7 +243,7 @@ export const OIDCContext : FC<ContextProps> =
  * your login button's `onClick`) might want to call (`state.login()`
  * and `state.logout()`).
  *
- * @see State
+ * @function useOpenIDConnectContext
  */
 export function useOpenIDConnectContext () {
   return useContext<State>(context);
@@ -371,6 +377,8 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
   /**
    * Consume the OAuth2 code if one is present in the browser URL.
    *
+   * @private
+   *
    * If we are back from the authentication server with `?code=`,
    * `&state=` and/or `&error=` credentials / error info in the query
    * parameters, then complete the authentication process and return
@@ -428,6 +436,8 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
   private tokenExpiresEpoch : number;
   /**
    * Perform an OAuth2 Access Token or Refresh Token request.
+   *
+   * @private
    *
    * Depending on whether the `initialOauth2code` parameter is set by
    * caller, the query sent to the authentication server will be the
@@ -533,6 +543,8 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
 
   /**
    * Redirect to the authentication server to initiate login.
+   *
+   * @private
    */
   private async redirectForLogin (config : AuthorizationServiceConfiguration) : Promise<void> {
     const usePkce = ! this.fakeStore;
@@ -626,6 +638,8 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
 }
 
 /**
+ * @class
+ *
  * An UnderlyingStorage that pretends to remember things from two redirects ago.
  *
  * If you pass `new LocalStorage(new FakeOAuth2State)` into
@@ -670,8 +684,10 @@ export class FakeOAuth2Store implements UnderlyingStorage {
 }
 
 /**
- * Like @openid/appauth's BasicQueryStringUtils, except
+ * @class
+ * @private
  *
+ * Like @openid/appauth's BasicQueryStringUtils, except
  * - checks for URL-embedded credentials in both places (before and
  * after the hash mark). DUH.
  * - helps in consuming the OAuthy parts out of the URL bar

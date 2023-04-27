@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "set -e -x; export NODE_ENV=production; babel --root-mode upward src/* --out-dir dist --extensions '.ts,.tsx' --source-maps; tsc --project tsconfig.build.json"
+    "build": "set -e -x; export NODE_ENV=production; babel --root-mode upward src/* --out-dir dist --extensions '.ts,.tsx' --source-maps; tsc --project tsconfig.build.json",
+    "apidocs": "set -e -x; jsdoc2md --files src/OpenIDConnect.tsx src/sundry-widgets.tsx --configure jsdoc2md.json > API.md"
   },
   "files": [
     "dist/**"

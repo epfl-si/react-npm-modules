@@ -1,0 +1,18 @@
+{
+  "tags": {
+    "allowUnknownTags": true
+  },
+  "plugins": [
+    "../node_modules/jsdoc-babel",
+    "plugins/markdown"
+  ],
+  "source": {
+    "includePattern": "\\.(jsx|js|ts|tsx)$"
+  },
+  "babel": {
+    "extensions": ["ts", "tsx"],
+    "babelrc": false,
+    "presets": [["@babel/preset-env", { "targets": { "node": true } }], "@babel/preset-typescript"],
+    "plugins": ["@babel/proposal-class-properties", "@babel/proposal-object-rest-spread"]
+  }
+}

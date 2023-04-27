@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "release": "set -e -x; yarn build ; changeset publish",
-    "build": "set -e -x; yarn; rm -rf */dist; yarn workspaces run build"
+    "build": "set -e -x; yarn; rm -rf */dist; yarn workspaces run build; yarn workspaces run apidocs"
   },
   "devDependencies": {
     "@babel/cli": "^7.21.0",
