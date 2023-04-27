@@ -35,8 +35,12 @@ export interface ClientConfig {
   clientId: string;
   /** A secret that identifies this particular client to the authentication server. */
   clientSecret ?: string;
-  /** The URI that the authentication server should redirect to upon successful authentication */
-  redirectUri: string;
+  /**
+   * The URI that the authentication server should redirect to upon
+   * successful authentication. If left undefined, use the browser's URL
+   * (after removing the OpenID-Connect-mandated query parameters, if any)
+   */
+  redirectUri?: string;
   /**
    * A keyword or space-separated list of keywords, designating the
    * set of informations that the resource server will want to know
@@ -430,7 +434,7 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
     const grant_type = initialOauth2code ? GRANT_TYPE_AUTHORIZATION_CODE : GRANT_TYPE_REFRESH_TOKEN;
     const request = new TokenRequest({
         ...this.getClientIdentity(this.client),
-        redirect_uri: this.client.redirectUri,
+        redirect_uri: this.getRedirectUri(),
         grant_type,
         ...(initialOauth2code ? { code: initialOauth2code } : {}),
         refresh_token: this.refreshToken,
@@ -473,6 +477,10 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
     };
   }
 
+  private getRedirectUri () {
+    return this.client.redirectUri || window.location.toString();
+  }
+
   /**
    * Start the login process.
    *
@@ -491,7 +499,7 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
 
     const request = new AuthorizationRequest({
       ...this.getClientIdentity(this.client),
-      redirect_uri: this.client.redirectUri,
+      redirect_uri: this.getRedirectUri(),
       scope: this.client.scope || "openid",
       response_type: AuthorizationRequest.RESPONSE_TYPE_CODE,
       // TODO: given that we handle the `state` rather... poorly when
@@ -503,7 +511,7 @@ class OpenIDConnect<InjectedTimeoutHandleT> {
 
     const authorizationHandler = new RedirectRequestHandler(this.storage);
     if (this.debug) {
-      console.log(`@epfl-si/react-appauth: redirecting to ${this.client.redirectUri} ${usePkce ? "with" : "without"} PKCE`);
+      console.log(`@epfl-si/react-appauth: redirecting to ${this.getRedirectUri()} ${usePkce ? "with" : "without"} PKCE`);
     }
     authorizationHandler.performAuthorizationRequest(config, request);
   }
