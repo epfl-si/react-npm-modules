@@ -1,5 +1,13 @@
 ## 0.8.0
 
+## 0.9.0
+
+### Minor Changes
+
+- Make `requestUri` optional
+
+  This lets applications keep their URI through the login process, provided the OIDC authorization server is OK with that. (For Keycloak: Clients → your client → Settings → Valid Redirect URIs should end with `*`)
+
 ## 0.8.2
 
 ### Patch Changes
