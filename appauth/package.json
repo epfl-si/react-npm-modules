@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "NODE_ENV=production babel --root-mode upward src/* --out-dir dist --extensions '.ts,.tsx' --source-maps && NODE_ENV=production tsc --project tsconfig.build.json",
+    "build": "NODE_ENV=production babel --root-mode upward src/* --out-dir dist --extensions '.ts,.tsx' --source-maps && NODE_ENV=production tsc --project tsconfig.build.json && rollup -c",
     "apidocs": "jsdoc2md --files src/OpenIDConnect.ts --configure ../jsdoc2md.json > API.md"
   },
   "files": [
