@@ -15,8 +15,6 @@ export interface ContextProps extends OpenIDConnectConfig {
   children?: ReactNode;
 }
 
-type StringMap = { [key : string] : string };
-
 export enum StateEnum {
   LoggedOut = 0,
   InProgress = 1,
@@ -46,7 +44,7 @@ export interface State {
   login: () => void;
   logout: () => void;
   accessToken?: string;
-  idToken?: StringMap;
+  idToken?: IdToken;
 }
 
 const context = createContext<State>({
@@ -103,7 +101,7 @@ export const OIDCContext : FC<ContextProps> =
   }
   const [error, setLastError] = useState<string>();
   const [accessToken, setAccessToken] = useState<string>();
-  const [idToken, setIdToken] = useState<StringMap>();
+  const [idToken, setIdToken] = useState<IdToken>();
 
   const oidcActions = useRef<{login: () => void, logout: () => Promise<void>}>();
   const renew = useTimeout();
@@ -134,7 +132,7 @@ export const OIDCContext : FC<ContextProps> =
       setLastError(`${error}`);
     }
 
-    function onIdToken (_ : string, decodedIdToken: StringMap) {
+    function onIdToken (_ : string, decodedIdToken: IdToken) {
       setIdToken(decodedIdToken);
     }
 

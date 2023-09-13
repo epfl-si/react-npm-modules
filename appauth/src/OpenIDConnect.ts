@@ -12,6 +12,9 @@ import { setOpenIdAppauthLogging } from "./hack-logging-level";
 import Resolvable from 'resolvable-promise';
 
 type StringMap = { [key : string] : string };
+
+export type IdToken = StringMap;
+
 export interface OpenIDConnectConfig {
   authServerUrl: string;
   client: ClientConfig;
