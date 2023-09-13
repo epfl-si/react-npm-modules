@@ -1,5 +1,14 @@
 ## 0.10.0
 
+## 0.11.1
+
+### Patch Changes
+
+- - Upgrade to Yarn 3, fix the build system ever after
+  - Add `CHANGELOG.md` to `@epfl-si/appauth`
+  - Export `IdToken` type
+  - To zero errors (TypeScript and otherwise)
+
 ## 0.11.0
 
 ### Minor Changes

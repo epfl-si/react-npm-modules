@@ -1,5 +1,16 @@
 # @epfl-si/react-graphql-paginated
 
+## 0.2.2
+
+### Patch Changes
+
+- - Upgrade to Yarn 3, fix the build system ever after
+  - Add `CHANGELOG.md` to `@epfl-si/appauth`
+  - Export `IdToken` type
+  - To zero errors (TypeScript and otherwise)
+- Updated dependencies
+  - @epfl-si/react-graphql-simple@0.3.3
+
 ## 0.2.1
 
 ### Patch Changes
