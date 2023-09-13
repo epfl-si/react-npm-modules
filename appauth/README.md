@@ -16,3 +16,14 @@ An unopinionated state machine for OpenID-Connect that wraps `@openid/appauth` i
 - **Supports cookie-less, local-storage-less operation**
   - This is in fact the default mode (unlike in `@openid/appauth`)
   - Obviously, this has a cost with respect to security: no `state=` validation, PKCE is disabled
+
+## How to Use
+
+### From a browser
+
+1. Create an HTML file [like this one](https://github.com/epfl-si/react-npm-modules/blob/master/examples/oidc-login-logout.html)
+
+
+## Reference manual
+
+[See `API.md` on GitHub](https://github.com/epfl-si/react-npm-modules/blob/master/appauth/API.md)

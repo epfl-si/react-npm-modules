@@ -1,0 +1,93 @@
+<html>
+    <head>
+        <title>Minimalistic @epfl-si/appauth application</title>
+        <script src="https://unpkg.com/@epfl-si/appauth@0.11.0/dist/umd/bundle.min.js"></script>
+    </head>
+    <body>
+        <!-- - This is a form for l33t h4x0rz. To change values, you need to edit the HTML. -->
+        <p>OIDC server: <span id="oidc-server">http://localhost:8080/realms/rails/</span></p>
+        <p>Client ID: <span id="oidc-client-id">hello_rails</span></p>
+        <p>Headroom time before renewal, in seconds: <span id="min-validity-seconds">270</span></p>
+        <button id="login-button">Login / Logout</button>
+        <hr/>
+        <p>Current auth token: <span id="authtoken"></span></p>
+        <p>Current ID token: <pre id="idtoken"></pre></p>
+    </body>
+
+    <script>
+     function getL33tFormValue(id) {
+       return document.getElementById(id).innerHTML;
+     }
+
+     function setInnerHTML(id, html) {
+       document.getElementById(id).innerHTML = html;
+     }
+
+     function changeButton (html) {
+       setInnerHTML("login-button", html);
+     }
+
+     let oidc, isLoggedIn, username;
+     function showAuthenticationInProgress () {
+       changeButton("⏳");
+     }
+
+     function showAuthenticationSteadyState () {
+       changeButton(isLoggedIn ? `Logout (${username})` : "Login");
+     }
+
+     function login () {
+       showAuthenticationInProgress();
+       oidc.login();  // Will navigate away in all cases; no need to await anything.
+     }
+
+     async function logout () {
+       showAuthenticationInProgress();
+       await oidc.logout();
+       onLogout();
+     }
+
+     function onLogout () {
+       setInnerHTML("authtoken", "");
+       setInnerHTML("idtoken", "");
+       changeButton("Login");
+       isLoggedIn = false;
+       username = undefined;
+       showAuthenticationSteadyState();
+     }
+
+    document.addEventListener("DOMContentLoaded", async function() {
+       const button = document.getElementById("login-button");
+
+       button.addEventListener("click", function() {
+         if (isLoggedIn) {
+           logout();
+         } else {
+           login();
+         }
+       });
+
+       oidc = new window.Appauth.OpenIDConnect({
+         debug: true,
+         authServerUrl: getL33tFormValue("oidc-server"),
+         client: { clientId: getL33tFormValue("oidc-client-id") },
+         minValiditySeconds: getL33tFormValue("min-validity-seconds")
+       });
+
+       showAuthenticationInProgress();
+       isLoggedIn = await oidc.run({
+         accessToken(token) {
+           setInnerHTML("authtoken", token);
+         },
+         idToken(tokenString, parsedToken) {
+           setInnerHTML("idtoken", JSON.stringify(parsedToken, null, 2));
+           username = parsedToken.preferred_username;
+         },
+         logout: onLogout,
+         error(err) { console.error(err); }
+       });
+       showAuthenticationSteadyState();
+
+     });
+    </script>
+</html>
