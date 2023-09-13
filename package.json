@@ -7,8 +7,9 @@
     "react-graphql-paginated"
   ],
   "scripts": {
-    "release": "set -e -x; yarn build ; changeset publish",
-    "build": "set -e -x; yarn; rm -rf */dist; yarn workspaces run build; yarn workspaces run apidocs"
+    "release": "yarn build && yarn apidocs && changeset publish",
+    "build": "yarn && rm -rf */dist && yarn workspaces foreach -t -v run build",
+    "apidocs": "yarn workspaces foreach -v run apidocs"
   },
   "devDependencies": {
     "@babel/cli": "^7.21.0",

@@ -5,7 +5,7 @@
   "main": "dist/graphql-simple.js",
   "types": "dist/graphql-simple.d.ts",
   "scripts": {
-    "build": "set -e -x; export NODE_ENV=production; babel --root-mode upward graphql-simple.tsx --extensions .tsx --out-dir dist --source-maps; tsc --project tsconfig.build.json",
+    "build": "NODE_ENV=production babel --root-mode upward graphql-simple.tsx --extensions .tsx --out-dir dist --source-maps && NODE_ENV=production tsc --project tsconfig.build.json",
     "apidocs": ":"
   },
   "files": [
