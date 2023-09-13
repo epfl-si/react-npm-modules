@@ -111,12 +111,12 @@ export class OpenIDConnect<InjectedTimeoutHandleT> {
   private fakeStore ?: FakeOAuth2Store;
   private debug : boolean;
   private minValiditySeconds : number | undefined;
-  private timeouts: InjectTimeoutAPI<InjectedTimeoutHandleT>;
+  private timeouts: InjectTimeoutAPI<any>;
   private timeout: InjectedTimeoutHandleT | undefined;
 
   constructor({ authServerUrl, client, storage,
                  debug, minValiditySeconds } : OpenIDConnectConfig,
-              timeouts: InjectTimeoutAPI<InjectedTimeoutHandleT>) {
+              timeouts?: InjectTimeoutAPI<InjectedTimeoutHandleT>) {
     this.authServerUrl = authServerUrl;
     this.client = client;
     if (storage) {
@@ -135,7 +135,10 @@ export class OpenIDConnect<InjectedTimeoutHandleT> {
     }
     this.debug = debug;
     this.minValiditySeconds = minValiditySeconds;
-    this.timeouts = timeouts;
+    this.timeouts = timeouts ? timeouts : {
+      setTimeout(millis, cb) { return window.setTimeout(millis, cb) },
+      clearTimeout(id) { window.clearTimeout(id) }
+    };
   }
 
   private whenConfigured = new Resolvable<AuthorizationServiceConfiguration>();
