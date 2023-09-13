@@ -34,7 +34,7 @@ or the <code>onLogout</code> callback</li>
 <li>arrange for timely token renewal</li>
 </ul>
 <p>This is a React context, meaning that one may use the matching
-[useOpenIDConnectContext](#useOpenIDConnectContext) React hook to consume the
+[useopenidconnectcontext](useopenidconnectcontext) React hook to consume the
 authentication state from any descendant component.</p>
 <p>Note that contrary to a “typical” React component, an
 <code>&lt;OIDCContext&gt;</code> does <em>not</em> destroy its state when its props change
@@ -162,7 +162,7 @@ or the <code>onLogout</code> callback</li>
 <li>arrange for timely token renewal</li>
 </ul>
 <p>This is a React context, meaning that one may use the matching
-[useOpenIDConnectContext](#useOpenIDConnectContext) React hook to consume the
+[useopenidconnectcontext](useopenidconnectcontext) React hook to consume the
 authentication state from any descendant component.</p>
 <p>Note that contrary to a “typical” React component, an
 <code>&lt;OIDCContext&gt;</code> does <em>not</em> destroy its state when its props change

@@ -1,6 +1,7 @@
 {
   "private": true,
   "workspaces": [
+    "appauth",
     "react-appauth",
     "react-graphql-simple",
     "react-graphql-paginated"
