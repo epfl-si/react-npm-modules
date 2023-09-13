@@ -13,7 +13,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/epfl-si/react-appauth.git"
+    "url": "git+https://github.com/epfl-si/react-npm-modules.git"
   },
   "keywords": [
     "OpenID-Connect",
@@ -24,9 +24,9 @@
   "author": "EPFL ISAS-FSD <isas-fsd@groupes.epfl.ch>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/epfl-si/react-appauth/issues"
+    "url": "https://github.com/epfl-si/react-npm-modules/issues"
   },
-  "homepage": "https://github.com/epfl-si/react-appauth#readme",
+  "homepage": "https://github.com/epfl-si/react-npm-modules#readme",
   "dependencies": {
     "@openid/appauth": "^1.3.1",
     "core-js": "^3.25.5",
