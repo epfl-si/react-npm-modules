@@ -1,12 +1,12 @@
 {
   "name": "@epfl-si/appauth",
   "version": "0.10.1",
-  "description": "@openid/appauth made simple (and GDPR-compliant)",
+  "description": "A simple (and GDPR-compliant) wrapper for @openid/appauth",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "NODE_ENV=production babel --root-mode upward src/* --out-dir dist --extensions '.ts,.tsx' --source-maps && NODE_ENV=production tsc --project tsconfig.build.json",
-    "apidocs": "jsdoc2md --files src/OpenIDConnect.tsx src/sundry-widgets.tsx --configure jsdoc2md.json > API.md"
+    "apidocs": "jsdoc2md --files src/OpenIDConnect.tsx src/sundry-widgets.tsx --configure ../jsdoc2md.json > API.md"
   },
   "files": [
     "dist/**"
