@@ -42,7 +42,7 @@ export function useGraphQLClient() {
  *
  *   const { loading, error, data, restart } = useGraphQLRequest(gql`...`, variables);
  */
-export function useGraphQLRequest<T = any, V = Variables> (gql : GQL, variables ?: V[])
+export function useGraphQLRequest<T = any, V extends Variables = Variables> (gql : GQL, variables ?: V)
 : { loading : boolean, error ?: Error, data ?: T, restart: () => void } {
   const clientPromise = useGraphQLClient();
   const [loading, setLoading] = useState<boolean>(true);
@@ -52,7 +52,7 @@ export function useGraphQLRequest<T = any, V = Variables> (gql : GQL, variables 
     if (! loading) return;    // Load once, wait for restart
     const client = await clientPromise;
     try {
-      current.data = await client.request(gql, variables);
+      current.data = await client.request(gql, variables || {});
     } catch (e) {
       current.error = e;
     }
