@@ -4,7 +4,7 @@ An unopinionated state machine for OpenID-Connect that wraps `@openid/appauth` i
 
 ## Feature Overview
 
-- Browser-side OpenID-Connect implementation, meaning all the backend server has left to do is look up bearer tokens with the OIDC identity provider (IdP)
+- Browser-side OpenID-Connect implementation, meaning all the backend server has left to do is validate bearer tokens with the OIDC identity provider (IdP)
   - Redirects the browser to the authorization server for the login operation
   - When redirected back, consumes (and cleans out) the `code=`, `state=`, `error=` and `session_state=` parts from the URL bar, regardless of whether they are found before or after the hash mark and whether the login operation was successful
   - Obtains OAuth2 tokens [using `fetch`, not jQuery](https://github.com/openid/AppAuth-JS/issues/191#issuecomment-944210147)
