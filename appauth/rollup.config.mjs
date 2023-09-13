@@ -5,8 +5,9 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 export default {
 	input: 'dist/index.js',
 	output: {
-		dir: 'dist/cjs',
-		format: 'cjs'
+                name: "Appauth",
+		file: 'dist/umd/bundle.min.js',
+		format: 'umd'
 	},
         plugins: [commonjs(), nodeResolve(), terser()]
 };
