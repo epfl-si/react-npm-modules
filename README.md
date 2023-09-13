@@ -16,5 +16,5 @@ git commit -a
 
 ## Publish everything
 
-<pre>yarn publish
+<pre>yarn release
 </pre>
