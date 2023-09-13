@@ -1,5 +1,11 @@
 # @epfl-si/appauth
 
+## 0.10.3
+
+### Patch Changes
+
+- Provide a CommonJS minified bundle
+
 ## 0.10.2
 
 ### Patch Changes
