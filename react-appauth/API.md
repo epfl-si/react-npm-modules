@@ -12,8 +12,7 @@
 <dd><p>OpenID-Connect state machine as a React context.</p>
 <p>Perform the operations dictated by the OpenID-Connect specification
 once at the time the component is created, so as to determine
-logged-in or logged-out status on behalf of {@link
-useOpenIDConnectContext}. Said operations consist of the following
+logged-in or logged-out status on behalf of [useOpenIDConnectContext](#useOpenIDConnectContext). Said operations consist of the following
 steps:</p>
 <ul>
 <li>consume any OpenID-Connect credentials out
@@ -77,8 +76,7 @@ wrap it in an &lt;IfOIDCState&gt;).</p></dd>
 <p>OpenID-Connect state machine as a React context.</p>
 <p>Perform the operations dictated by the OpenID-Connect specification
 once at the time the component is created, so as to determine
-logged-in or logged-out status on behalf of {@link
-useOpenIDConnectContext}. Said operations consist of the following
+logged-in or logged-out status on behalf of [useOpenIDConnectContext](#useOpenIDConnectContext). Said operations consist of the following
 steps:</p>
 <ul>
 <li>consume any OpenID-Connect credentials out
