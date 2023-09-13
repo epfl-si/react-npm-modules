@@ -1,5 +1,11 @@
 ## 0.10.0
 
+## 0.11.0
+
+### Minor Changes
+
+- Split out `@epfl-si/appauth`
+
 ### Minor Changes
 
 - OIDCContext: do _not_ auto-logout on prop change.

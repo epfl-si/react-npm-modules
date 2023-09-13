@@ -1,6 +1,6 @@
 {
   "name": "@epfl-si/appauth",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "@openid/appauth made simple (and GDPR-compliant)",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

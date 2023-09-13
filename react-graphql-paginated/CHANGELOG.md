@@ -1,5 +1,13 @@
 # @epfl-si/react-graphql-paginated
 
+## 0.2.1
+
+### Patch Changes
+
+- Split out `@epfl-si/appauth`
+- Updated dependencies
+  - @epfl-si/react-graphql-simple@0.3.2
+
 ## 0.2.0
 
 ### Minor Changes
