@@ -1,5 +1,12 @@
 # @epfl-si/appauth
 
+## 0.11.0
+
+### Minor Changes
+
+- - Proper JS compile step (UMD target)
+  - Example HTML file with basic (framework-less) JS
+
 ## 0.10.3
 
 ### Patch Changes
