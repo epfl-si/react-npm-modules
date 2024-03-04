@@ -1,5 +1,11 @@
 ## 0.10.0
 
+## 0.13.0
+
+### Minor Changes
+
+- Fix dependency from @epfl-si/react-appauth to @epfl-si/appauth
+
 ## 0.12.0
 
 ### Minor Changes
