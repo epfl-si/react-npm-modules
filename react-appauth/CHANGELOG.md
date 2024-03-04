@@ -1,5 +1,11 @@
 ## 0.10.0
 
+## 0.12.0
+
+### Minor Changes
+
+- Straighten peer dependencies
+
 ## 0.11.1
 
 ### Patch Changes

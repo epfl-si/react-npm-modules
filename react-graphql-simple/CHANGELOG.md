@@ -1,5 +1,16 @@
 # @epfl-si/react-graphql-simple
 
+## 0.4.0
+
+### Minor Changes
+
+- Straighten peer dependencies
+
+### Patch Changes
+
+- Updated dependencies
+  - @epfl-si/react-appauth@0.12.0
+
 ## 0.3.3
 
 ### Patch Changes
