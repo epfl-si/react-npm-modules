@@ -36,7 +36,8 @@
     "@types/react": "^18.0.25"
   },
   "peerDependencies": {
-    "react": "15 - 19"
+    "graphql": "14 - 16",
+    "react": "17 - 19"
   },
   "publishConfig": {
     "access": "public"
