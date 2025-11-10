@@ -1,4 +1,10 @@
 # @epfl-si/appauth
+## 0.12.0
+
+### Patch Changes
+
+  - Permit to handle PKCE and client secret authorization flows
+  - Permit to store session tokens
 
 ## 0.11.0
 
