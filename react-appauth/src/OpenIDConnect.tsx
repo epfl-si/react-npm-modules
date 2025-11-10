@@ -5,10 +5,11 @@ import * as React from "react";
 import { ReactNode, FC, useState, useRef, createContext, useContext } from "react";
 import { useAsyncEffect } from "use-async-effect";
 import { useTimeout } from "./use_hooks";
-import { OpenIDConnect, OpenIDConnectConfig, IdToken } from '@epfl-si/appauth';
+import { OpenIDConnect, OpenIDConnectConfig, IdToken, decodeJWT } from '@epfl-si/appauth';
 
 export interface ContextProps extends OpenIDConnectConfig {
   onNewToken?: (token: string) => void;
+  onNewIdToken?: (token: string) => void;
   onLogout?: () => void;
   onInitialAuthComplete?: () => void;
   minValiditySeconds?: number;
@@ -87,7 +88,7 @@ const context = createContext<State>({
  */
 export const OIDCContext : FC<ContextProps> =
   ({ debug, authServerUrl, client, storage,
-     minValiditySeconds, onNewToken, onLogout, onInitialAuthComplete,
+     minValiditySeconds, onNewToken, onNewIdToken, onLogout, onInitialAuthComplete,
    children }) => {
   if (! minValiditySeconds) minValiditySeconds = 5;
 
@@ -122,6 +123,7 @@ export const OIDCContext : FC<ContextProps> =
         if (onLogout) onLogout();
       } else {
         setLastError(undefined);
+        storage.setItem("accessToken", accessToken);
         if (onNewToken) onNewToken(accessToken);
       }
     }
@@ -132,16 +134,41 @@ export const OIDCContext : FC<ContextProps> =
       setLastError(`${error}`);
     }
 
-    function onIdToken (_ : string, decodedIdToken: IdToken) {
-      setIdToken(decodedIdToken);
+    function onIdToken (idToken : string, decodedIdToken: IdToken) {
+        storage.setItem("idToken", idToken);
+        if (onNewIdToken) onNewIdToken(idToken);
+        setIdToken(decodedIdToken);
     }
 
-    await oidc.run({
-      accessToken: onChangeToken,
-      idToken: onIdToken,
-      logout: () => onChangeToken(undefined),
-      error: onError
-    });
+    let validTokenStored = false;
+    const storedIdToken = await storage.getItem("idToken");
+    const storedAccessToken = await storage.getItem("accessToken");
+    if (storedIdToken && storedAccessToken) {
+      const idTokenDecoded = decodeJWT(storedIdToken);
+      const accessTokenDecoded = decodeJWT(storedAccessToken);
+      const currentTime = Date.now();
+      const idTokenExpiry = +idTokenDecoded.exp * 1000;
+      const accessTokenExpiry = +accessTokenDecoded.exp * 1000;
+      let valid = currentTime < idTokenExpiry && currentTime < accessTokenExpiry;
+      if (valid) {
+        validTokenStored = true;
+      }
+    }
+
+    if (validTokenStored) {
+      const idTokenDecoded = decodeJWT(storedIdToken);
+      onIdToken(storedIdToken, idTokenDecoded);
+      onChangeToken(storedAccessToken);
+    }
+    else {
+      await oidc.run({
+        accessToken: onChangeToken,
+        idToken: onIdToken,
+        logout: () => onChangeToken(undefined),
+        error: onError
+      });
+    }
+
     setInProgress(false);
   },
                  // We *do not* want the `useAsyncEffect` callback above
@@ -163,6 +190,8 @@ export const OIDCContext : FC<ContextProps> =
       login() { oidcActions.current && oidcActions.current.login(); },
       async logout() {
         setInProgress(true);
+        await storage.removeItem("idToken");
+        await storage.removeItem("accessToken");
         oidcActions.current && await oidcActions.current.logout();
         setInProgress(false);
       },

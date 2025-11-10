@@ -367,7 +367,7 @@ export class OpenIDConnect<InjectedTimeoutHandleT> {
       ...this.getClientIdentity(this.client),
       redirect_uri: this.getRedirectUri(),
       scope: this.client.scope || "openid",
-      response_type: AuthorizationRequest.RESPONSE_TYPE_CODE,
+      response_type: this.client.clientSecret ? AuthorizationRequest.RESPONSE_TYPE_TOKEN : AuthorizationRequest.RESPONSE_TYPE_CODE,
       // TODO: given that we handle the `state` rather... poorly when
       // we use the fake storage, we should probably make this
       // accessible to user code somehow.
@@ -505,6 +505,31 @@ export class FakeOAuth2Store implements UnderlyingStorage {
   clear() {}
 }
 
+export class Auth2Store implements UnderlyingStorage {
+  constructor() {}
+
+  get length() {
+    return 1
+  }
+
+  getItem(key: string) {
+    const value = window.localStorage.getItem(key);
+    return value;
+  }
+
+  setItem(_key: string, _data: string) {
+    window.localStorage.setItem(_key, _data);
+  }
+
+  removeItem(_key: string) {
+    window.localStorage.removeItem(_key);
+  }
+
+  clear() {
+    window.localStorage.clear();
+  }
+}
+
 /**
  * @class
  * @private
@@ -551,7 +576,7 @@ class SmarterQueryStringUtils extends BasicQueryStringUtils {
   }
 }
 
-function decodeJWT(jwt : string) : StringMap {
+export function decodeJWT(jwt : string) : StringMap {
   // Credits to https://stackoverflow.com/a/38552302
   const base64 = jwt.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
   const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
