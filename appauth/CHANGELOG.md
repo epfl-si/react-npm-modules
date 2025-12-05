@@ -1,11 +1,8 @@
 # @epfl-si/appauth
 
-## 0.12.0
+## ~~0.12.0~~
 
-### Minor Changes
-
-- Ability to handle PKCE and client secret authorization flows
-- Ability to store session tokens
+Please do not use this release.
 
 ## 0.11.0
 
