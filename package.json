@@ -21,6 +21,7 @@
     "@rollup/plugin-node-resolve": "^15.2.1",
     "@rollup/plugin-terser": "^0.4.3",
     "@types/react": "^18.0.20",
+    "jsdoc": "^4.0.5",
     "jsdoc-babel": "^0.5.0",
     "jsdoc-to-markdown": "^8.0.0",
     "rollup": "^3.29.1",
