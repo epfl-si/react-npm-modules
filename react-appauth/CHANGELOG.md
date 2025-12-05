@@ -1,4 +1,8 @@
-## 0.10.0
+## 0.14.0
+
+### Minor Changes
+
+- Ability to store session tokens
 
 ## 0.13.0
 
