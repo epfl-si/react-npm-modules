@@ -26,7 +26,6 @@ export interface OpenIDConnectConfig {
   minValiditySeconds?: number;
 }
 
-let _HACK_KEEP_THIS_JSDOC = 1;
 /**
  * @typedef {Object} ClientConfig
  * The set of information that the client (browser) will send to the
@@ -36,8 +35,6 @@ let _HACK_KEEP_THIS_JSDOC = 1;
  * @property {string} clientId - The name the client is registered as in the OIDC authentication server
  *
  */
-_HACK_KEEP_THIS_JSDOC = _HACK_KEEP_THIS_JSDOC * 1;
-
 export interface ClientConfig {
   clientId: string;
   /** A secret that identifies this particular client to the authentication server. */

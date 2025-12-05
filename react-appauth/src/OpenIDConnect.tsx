@@ -22,8 +22,6 @@ export enum StateEnum {
   Error = 3
 };
 
-let _HACK_KEEP_THIS_JSDOC = 1;
-
 /**
  * @typedef {Object} State
  * The things that `useOpenIDConnectContext` returns.
@@ -36,8 +34,6 @@ let _HACK_KEEP_THIS_JSDOC = 1;
  *                     if we are currently logged out
  * @property { Object } idToken - The decoded JWT ID token
  */
-_HACK_KEEP_THIS_JSDOC = _HACK_KEEP_THIS_JSDOC * 1;
-
 export interface State {
   state: StateEnum;
   error?: string;
