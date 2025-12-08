@@ -82,7 +82,7 @@ const context = createContext<State>({
  * `useOpenIDConnectContext().logout()` by yourself.
  */
 export const OIDCContext : FC<ContextProps> =
-  ({ debug, authServerUrl, client, storage,
+  ({ debug, authServerUrl, client, storage, refreshStorage,
      minValiditySeconds, onNewToken, onLogout, onInitialAuthComplete,
    children }) => {
   if (! minValiditySeconds) minValiditySeconds = 5;
@@ -104,7 +104,7 @@ export const OIDCContext : FC<ContextProps> =
 
   useAsyncEffect(async (isActive) => {
     const oidc = new OpenIDConnect(
-      { debug, client, authServerUrl, storage, minValiditySeconds },
+      { debug, client, authServerUrl, storage, refreshStorage, minValiditySeconds },
       { setTimeout: renew.start, clearTimeout: renew.stop });
     oidcActions.current = oidc;
 

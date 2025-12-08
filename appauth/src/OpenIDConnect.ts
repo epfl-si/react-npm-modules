@@ -35,6 +35,18 @@ export interface OpenIDConnectConfig {
    */
   storage?: StorageBackend;
   /**
+   * A place to store the refresh token.
+   *
+   * Passing `window.sessionStorage` here, will result in refresh
+   * tokens being stored in that store; this makes the browser Reload
+   * button just work (i.e. no need to authenticate again). You should
+   * **not** pass `window.localStorage` here, as this would make the
+   * close tab button just not work (i.e. reopening the same URL again
+   * in the browser, would resume the session, which is unexpected and
+   * therefore a UX-mediated security issue)
+   */
+  refreshStorage?: typeof window.sessionStorage;
+  /**
    * If set, enable automatic renewal
    */
   minValiditySeconds?: number;
@@ -104,13 +116,14 @@ export class OpenIDConnect<InjectedTimeoutHandleT> {
   private authServerUrl : string;
   private client : ClientConfig;
   private storage : StorageBackend;
+  private refreshStorage ?: typeof window.sessionStorage;
   private fakeStore ?: FakeOAuth2Store;
   private debug : boolean;
   private minValiditySeconds : number | undefined;
   private timeouts: InjectTimeoutAPI<any>;
   private timeout: InjectedTimeoutHandleT | undefined;
 
-  constructor({ authServerUrl, client, storage,
+  constructor({ authServerUrl, client, storage, refreshStorage,
                  debug, minValiditySeconds } : OpenIDConnectConfig,
               timeouts?: InjectTimeoutAPI<InjectedTimeoutHandleT>) {
     this.authServerUrl = authServerUrl;
@@ -129,6 +142,7 @@ export class OpenIDConnect<InjectedTimeoutHandleT> {
       this.fakeStore = new FakeOAuth2Store(window.location);
       this.storage = new LocalStorageBackend(this.fakeStore);
     }
+    this.refreshStorage = refreshStorage;
     this.debug = debug;
     this.minValiditySeconds = minValiditySeconds;
     this.timeouts = timeouts ? timeouts : {
@@ -139,6 +153,29 @@ export class OpenIDConnect<InjectedTimeoutHandleT> {
 
   private whenConfigured = new Resolvable<AuthorizationServiceConfiguration>();
   private callbacks : Callbacks;
+
+  private getRefreshTokenStorageKey () : string {
+    return `oidc_refresh_token_${this.client.clientId}`;
+  }
+
+  private loadRefreshTokenFromStorage () : string | undefined {
+    if (! this.refreshStorage) return;
+
+    return this.refreshStorage.getItem(this.getRefreshTokenStorageKey());
+  }
+
+  private saveRefreshTokenToStorage (token: string) : void {
+    if (! this.refreshStorage) return;
+
+    this.refreshStorage.setItem(this.getRefreshTokenStorageKey(), token);
+  }
+
+  private deleteRefreshTokenInStorage() : void {
+    if (! this.refreshStorage) return;
+
+    this.refreshStorage.removeItem(this.getRefreshTokenStorageKey());
+  }
+
   /**
    * Start the token fetch and renewal process. Awaits the first
    * successful token event if we are currently logged in. That is, if
@@ -170,13 +207,28 @@ export class OpenIDConnect<InjectedTimeoutHandleT> {
       });
 
       const code = await this.consumeOAuth2CodeFromBrowserLocation();
-      if (! code) return false;
+      if (code) {
+        await this.obtainAndDispatchTokens(code);
+        return true;
+      }
 
-      await this.obtainAndDispatchTokens(code);
+      const storedRefreshToken = this.loadRefreshTokenFromStorage();
+      if (storedRefreshToken) {
+        this.refreshToken = storedRefreshToken;
+        try {
+          await this.obtainAndDispatchTokens();
+          return true;
+        } catch (e) {
+          this.deleteRefreshTokenInStorage();
+          this.refreshToken = undefined;
+          return false;
+        }
+      }
 
-      return true;
+      return false;
     } catch(e) {
       this.callbacks.error(e);
+      return false;
     }
   }
 
@@ -316,6 +368,7 @@ export class OpenIDConnect<InjectedTimeoutHandleT> {
     }
     if (tokens.refreshToken) {
       this.refreshToken = tokens.refreshToken;
+      this.saveRefreshTokenToStorage(tokens.refreshToken);
     }
 
 
@@ -389,6 +442,7 @@ export class OpenIDConnect<InjectedTimeoutHandleT> {
     } finally {
       this.refreshToken = undefined;
       this.tokenExpiresEpoch = undefined;
+      this.saveRefreshTokenToStorage(undefined);
       this.callbacks.logout();
     }
   }
