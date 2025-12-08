@@ -19,6 +19,20 @@ export interface OpenIDConnectConfig {
   authServerUrl: string;
   client: ClientConfig;
   debug?: boolean;
+  /**
+   * A place to store the OAuth2 `state=` and PKCE `code_verifier`
+   * inbetween redirects.
+   *
+   * passing either `new LocalStorageBackend()` or `new
+   * LocalStorageBackend(window.sessionStorage)` (where
+   * `LocalStorageBackend` is re-rexported from `@openid/appauth`),
+   * will result in the browser performing a fully-compliant OAuth2
+   * authorization code flow with working `state=` and PKCE checks.
+   * This in turn requires browser storage, which will be of the
+   * `window.localStorage` or `window.sessionStorage` variety,
+   * respectively. By default, no browser storage is used, and
+   * (therefore) `state=` checks and PKCE are both disabled.
+   */
   storage?: StorageBackend;
   /**
    * If set, enable automatic renewal
@@ -51,21 +65,6 @@ export interface ClientConfig {
    * about the user. The default value is “openid”.
    */
   scope?: string;
-  /**
-   * A place to store the OAuth2 `state=` and PKCE `code_verifier`
-   * inbetween redirects.
-   *
-   * passing either `new LocalStorageBackend()` or `new
-   * LocalStorageBackend(window.sessionStorage)` (where
-   * `LocalStorageBackend` is re-rexported from `@openid/appauth`),
-   * will result in the browser performing a fully-compliant OAuth2
-   * authorization code flow with working `state=` and PKCE checks.
-   * This in turn requires browser storage, which will be of the
-   * `window.localStorage` or `window.sessionStorage` variety,
-   * respectively. By default, no browser storage is used, and
-   * (therefore) `state=` checks and PKCE are both disabled.
-   */
-  storage?: StorageBackend;
   /**
    * Any nonstandard configuration parameters to tweak the
    * authentication server's behavior during the authorization
